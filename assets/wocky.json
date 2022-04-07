@@ -1,0 +1,32 @@
+{
+    "Wocky": {
+        "client_port": "",
+        "bot_port": "",
+        "title": "",
+        "description": "",
+        "version": ""
+    },
+    "DB": {
+        "host": "",
+        "port": "",
+        "username": "",
+        "dbname": ""
+    },
+    "Design": {
+        "Terminal": {
+            "title": "",
+            "size": ""
+        },
+        "CNC": {
+            "cnc_output_position": "",
+            "max_output_rows": "",
+            "max_output_width": "",
+            "last_cmd_output": "",
+            "cmd_response_output": ""
+        },
+        "online_list": {
+            "output_toggle": "",
+            "output_position": ""
+        }
+    }
+}
