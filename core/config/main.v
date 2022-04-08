@@ -1,4 +1,4 @@
-module term_control
+module config
 
 pub const (
 	//Colors

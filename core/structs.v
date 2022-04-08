@@ -1,4 +1,4 @@
-module wocky
+module core
 
 import os
 import net
@@ -23,9 +23,6 @@ pub struct Terminal {
 	size		string // Expecting a X & Y position
 	title		string // [REQUIRED]
 	pub mut:
-		// Terminal Customization
-		current_output			string // Current TUI
-
 		// Hostname Output Customization
 		hostname				string // [REQUIRED] [Wocky@Net]~ #
 		hostname_position		string // [REQUIRED] Expecting a X & Y position

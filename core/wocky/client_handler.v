@@ -5,6 +5,7 @@ import io
 import net
 import time
 
+import config
 import wocky
 import term_control
 import utilities
@@ -18,21 +19,21 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	user_ip := "${user_addr}".replace("[::ffff:","").split("]:")[0]
 	user_port := "${user_addr}".split("]:")[1]
 	
-	socket.write_string("${term_control.Red}Username: ${term_control.Default}") or { 0 }
+	socket.write_string("${config.Red}Username: ${config.Default}") or { 0 }
 	username := reader.read_line() or { "" }
-	socket.write_string("${term_control.Red}Password: ${term_control.Default}") or { 0 }
+	socket.write_string("${config.Red}Password: ${config.Default}") or { 0 }
 	password := reader.read_line() or { "" }
 
 	// Have to do a auth check here with the username and password later
 	// mut login_check := auth.login(username, password, user_ip, mut w)
 	// if login_check == 0 {
-	// 	socket.write_string("${term_control.Clear}${term_control.Red}[x] Error, Invalid information provided! exiting....")
+	// 	socket.write_string("${config.Clear}${config.Red}[x] Error, Invalid information provided! exiting....")
 	// 	time.sleep(2*time.second)
 	// 	socket.close() or { return }
 	// }
 
 	socket.write_string("Welcome to Wocky III\r\n") or { 0 }
-	println("${term_control.Green}[${utilities.current_time()}][+]${term_control.Default} User succesfully logged in. ${username} | ${user_ip}")
+	println("${config.Green}[${utilities.current_time()}][+]${config.Default} User succesfully logged in. ${username} | ${user_ip}")
 
 	// Log User to CLIENTS SESSIONS
 
