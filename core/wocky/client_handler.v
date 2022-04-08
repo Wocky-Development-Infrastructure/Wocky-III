@@ -5,7 +5,6 @@ import io
 import net
 import time
 
-
 import wocky
 import term_control
 import utilities
