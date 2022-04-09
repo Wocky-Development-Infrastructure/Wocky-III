@@ -28,9 +28,7 @@ pub fn read_user(user string, mut conn mysql.Connection) map[string]string {
 			row_info['expiry'] = info['expiry']
 		}
 	}
-	unsafe {
-		resp.free()
-	}
+	resp.free()
 	conn.close()
 	return row_info
 }
