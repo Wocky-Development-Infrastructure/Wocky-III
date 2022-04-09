@@ -41,3 +41,7 @@ pub fn update_user(user string, password string, ip string, mut conn mysql.Conne
     resp := conn.query('INSERT INTO users VALUES(0, \"${user}\", \"${ip}\", SHA1(\"${password}\"), 0, 0, 0, 0, 0, "0/00/0000")')
 	conn.close()
 }
+
+pub fn delete_user(user string) {
+	
+}

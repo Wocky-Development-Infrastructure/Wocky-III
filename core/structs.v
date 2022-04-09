@@ -20,9 +20,9 @@ pub struct Buffer {
 }
 
 pub struct Terminal {
-	size		string // Expecting a X & Y position
-	title		string // [REQUIRED]
 	pub mut:
+		size		string // Expecting a X & Y position
+		title		string // [REQUIRED]
 		// Hostname Output Customization
 		hostname				string // [REQUIRED] [Wocky@Net]~ #
 		hostname_position		string // [REQUIRED] Expecting a X & Y position
@@ -34,6 +34,10 @@ pub struct Terminal {
 		max_output_width		int // [REQUIRED]
 		last_cmd_output			string // Expecting a X & Y position
 		cmd_response_output		string // Expecting a X & Y position
+
+		// Online User List
+		output_toggle			bool
+		output_position 		string
 }
 
 /*

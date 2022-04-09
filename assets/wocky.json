@@ -17,6 +17,11 @@
             "title": "",
             "size": ""
         },
+        "Hostname": {
+            "hostname": "",
+            "hostname_position": "",
+            "cli_cursor": ""
+        },
         "CNC": {
             "cnc_output_position": "",
             "max_output_rows": "",
