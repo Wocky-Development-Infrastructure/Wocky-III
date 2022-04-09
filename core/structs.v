@@ -53,3 +53,37 @@ pub fn (mut b Buffer) parse(input string) {
 		b.cmd_args << input
 	}
 }
+
+/*
+	Function for Clients Struct
+*/
+
+pub fn (mut c Clients) add_session(username string, mut socket net.TcpConn, ip string, port string) {
+	c.count++
+	c.u_names << username
+	c.u_sockets << (mut socket)
+	c.u_ips << ip
+	c.u_ports << port
+
+}
+
+pub fn (mut c Clients) get_session_info(mut s net.TcpConn) (string, string, string) {
+	for i, socket in c.u_sockets {
+		if socket == s {
+			return c.u_names[i], c.u_ips[i], c.u_ports[i]
+		}
+	}
+	return "", "", ""
+}
+
+pub fn (mut c Clients) remove_session(mut s net.TcpConn) {
+	for i, socket in c.u_sockets {
+		if socket == s {
+			c.u_sockets.delete(i)
+			c.u_names.delete(i)
+			c.u_ips.delete(i)
+			c.u_ports.delete(i)
+		}
+	}
+	c.count-=1
+}

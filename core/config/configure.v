@@ -49,8 +49,8 @@ pub fn configure_design_info(mut t core.Terminal) {
 	cnc_settings := cnc_json_settings.as_map()
 
 	t.cnc_output_position = cnc_settings['cnc_output_position'].str()
-	t.max_output_rows = cnc_settings['max_output_rows'].str()
-	t.max_output_width = cnc_settings['max_output_width'].str()
+	t.max_output_rows = cnc_settings['max_output_rows'].int()
+	t.max_output_width = cnc_settings['max_output_width'].int()
 	t.last_cmd_output = cnc_settings['last_cmd_output'].str()
 	t.cmd_response_output = cnc_settings['cmd_response_output'].str()
 
@@ -58,7 +58,7 @@ pub fn configure_design_info(mut t core.Terminal) {
 	cnc_list_settings := json2.raw_decode(design_settings['online_list'].str()) or { 0 }
 	onlinelist_settings := cnc_list_settings.as_map()
 
-	t.output_toggle = onlinelist_settings['output_toggle'].str()
+	t.output_toggle = onlinelist_settings['output_toggle'].bool()
 	t.output_position = onlinelist_settings['output_position'].str()
 	
 }
