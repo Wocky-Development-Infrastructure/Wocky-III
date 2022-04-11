@@ -40,6 +40,7 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 		socket.close() or { return }
 	}
 
+	socket.write_string(config.Clear) or { 0 }
 	w.clients.add_session(username, mut socket, user_ip, user_port)
 	socket.write_string("Welcome to Wocky III\r\n") or { 0 }
 	println("${config.Green}[${utilities.current_time()}][+]${config.Default} User succesfully logged in. ${username} | ${user_ip}")
@@ -69,6 +70,9 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 						socket.close() or { return }
 						return
 					}
+				}
+				"clear" {
+					socket.write_string(config.Clear) or { 0 }
 				}
 				"stress" {
 					// Stress Usage: stress <ip> <port> <time> <method>

@@ -50,13 +50,10 @@ pub fn create_user_alt(mut a AltCrud) Result {
 		}
 */
 pub fn read_user_alt(mut a AltCrud) AltCrud {
-	println(db_filepath)
 	mut users := os.read_lines(db_filepath) or {
 		println("[x] Error, Unable to find db....!")
 		exit(0)
 	}
-
-	mut user_info := map[string]string
 
 	for i, user in users {
 		current_info := parse_line(user)
@@ -80,15 +77,15 @@ pub fn read_user_alt(mut a AltCrud) AltCrud {
 pub fn struct_to_map(a AltCrud) map[string]string {
 	mut resp := map[string]string
 
-	resp['id'] = a.id
+	resp['id'] = a.id.str()
 	resp['username'] = a.username
 	resp['ip'] = a.ip
 	resp['password'] = a.password
-	resp['plan'] = a.plan
-	resp['maxtime'] = a.maxtime
-	resp['conn'] = a.conn
-	resp['ongoing'] = a.ongoing
-	resp['admin'] = a.admin
+	resp['plan'] = a.plan.str()
+	resp['maxtime'] = a.maxtime.str()
+	resp['conn'] = a.conn.str()
+	resp['ongoing'] = a.ongoing.str()
+	resp['admin'] = a.admin.str()
 	resp['expiry'] = a.expiry
 
 	return resp
