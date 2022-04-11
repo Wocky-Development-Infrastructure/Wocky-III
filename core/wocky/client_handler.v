@@ -14,6 +14,8 @@ import utilities
 import term_control
 import attack_system
 
+import commands // List of Commands
+
 
 pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) { 
 	mut reader := io.new_buffered_reader(reader: socket)
