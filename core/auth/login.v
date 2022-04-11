@@ -14,7 +14,8 @@ pub fn login(username string, password string, user_ip string, mut sql mysql.Con
 	mut user_info := map[string]string
 
 	mut alt_c := crud.AltCrud{username: "root"}
-	mut info := crud.read_user_alt(mut alt_c)
+	mut info_struct := crud.read_user_alt(mut alt_c)
+	mut info := crud.struct_to_map(info_struct)
 	user_info['id'] = info['id'].str()
 	user_info['username'] = info['username']
 	user_info['ip'] = info['ip']

