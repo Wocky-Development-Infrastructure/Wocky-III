@@ -9,7 +9,7 @@ pub fn create_user(user string, password string, ip string, mut conn mysql.Conne
 	conn.close()
 }
 
-pub fn read_user(user string, mut conn mysql.Connection) map[string]string {
+pub fn read_user(user string, mut conn mysql.Connection) ?map[string]string {
 	conn.connect() or { println("[x] Error, Unable to connect to MySQL!") }
 	mut resp := conn.query('SELECT * FROM users WHERE username=\'${user}\'') or { panic("[x] Error, Unable to interact with MySQL!") }
 
@@ -28,7 +28,9 @@ pub fn read_user(user string, mut conn mysql.Connection) map[string]string {
 			row_info['expiry'] = info['expiry']
 		}
 	}
-	resp.free()
+	unsafe {
+		resp.free()
+	}
 	conn.close()
 	return row_info
 }

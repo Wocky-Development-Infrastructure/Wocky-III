@@ -32,9 +32,11 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	mut login_check, user_info := auth.login(username, password, user_ip, mut w.sqlconn)
 	if login_check == 0 {
 		socket.write_string("${config.Clear}${config.Red}[x] Error, No user found.....! exiting....") or { 0 }
+		time.sleep(3*time.second)
 		socket.close() or { return }
 	} else if login_check == -1 {
 		socket.write_string("${config.Clear}${config.Red}[x] Error, Invalid username or password.....! exiting....") or { 0 }
+		time.sleep(3*time.second)
 		socket.close() or { return }
 	}
 
@@ -73,7 +75,7 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 					if buffer.cmd_args.len < 4 {
 						println("[x] Error, Invalid argument\nUsage: stress <ip> <port> <time> <method>")
 					} else {
-						mut api_names, api_urls/*, api_maxtime, api_conn*/ := crud.read_apis_with_method(buffer.cmd_args[4], mut w.sqlconn)
+						mut api_names, api_urls/*, api_maxtime, api_conn*/ := crud.read_apis_with_method_alt(buffer.cmd_args[4])
 						t := attack_system.send_api_attack(buffer.cmd_args[1], buffer.cmd_args[2], buffer.cmd_args[3], buffer.cmd_args[4], db_user_info, mut w.sqlconn, api_names, api_urls)
 						socket.write_string(t) or { 0 }
 					}
