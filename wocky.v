@@ -60,5 +60,6 @@ fn main() {
 	go wocky.start_wocky(mut &w)
 	for {
 		input := os.input(">>> ")
+		config.configure_design_info(mut t)
 	}
 }
