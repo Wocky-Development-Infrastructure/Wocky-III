@@ -1,0 +1,11 @@
+perm free
+
+var test = "";
+
+clear();
+hide_cursor();
+output_wrfx("ui");
+place_text(3,5,"Testing in box typing");
+sleep(5);
+place_text(10,5,"testing lul");
+sleep(20);

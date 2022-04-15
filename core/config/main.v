@@ -12,7 +12,7 @@ pub const (
     Cyan             = "\x1b[36m"
     Light_Grey       = "\x1b[37m"
     Dark_Grey        = "\x1b[90m"
-    Light_red        = "\x1b[91m"
+    Light_Red        = "\x1b[91m"
     Light_Green      = "\x1b[92m"
     Light_Yellow     = "\x1b[93m"
     Light_Blue       = "\x1b[94m"
