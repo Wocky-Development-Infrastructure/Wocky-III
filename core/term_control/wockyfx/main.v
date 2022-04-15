@@ -19,6 +19,8 @@ pub struct WockyFX {
 		fcmd			string
 		cmd 			string
 		cmd_args		[]string
+
+		online_users	string
 }
 
 pub const (
@@ -40,6 +42,10 @@ pub const (
 						'list_text',  //6
 						'hide_cursor', //7
 						'show_cursor', // 8
+						'slow_place_text', // 9
+						'set_term_size', // 10
+						'change_term_title', // 11
+						'move_cursor', // 12
 						'send_attack']
 	wfx_loops		= ['for']
 )
@@ -91,8 +97,13 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 		Variable are replaced so function names and for key is what we need to parse here
 	*/
 	mut fn_found := false
-	for i, line in ui {
+	for i, linee in ui {
+		mut line := linee
 		if line == "" { continue }
+		if line.starts_with("perm") { continue }
+		if line.contains("//") {
+			line = line.split("//")[0]
+		}
 
 		if line.starts_with(wfx_loops[0]) {
 			// parse for loop (later)
@@ -101,7 +112,7 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 		} else {
 			for d, fn_n in wfx_fns {
 				if line.starts_with(fn_n) {
-					wockyfx.parse_fns(line, wx.socket_toggle, mut wx.socket)
+					wockyfx.parse_fns(line, i, wx.socket_toggle, mut wx.socket, mut wx)
 					fn_found = true
 				}
 			}
@@ -112,7 +123,7 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 				if wx.socket_toggle == true {
 					wx.socket.write_string(fix) or { 0 }
 				} else {
-					print(fix)
+					// print(fix)
 				}
 			}
 		}

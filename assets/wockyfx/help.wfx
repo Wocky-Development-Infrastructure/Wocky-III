@@ -1,11 +1,44 @@
-perm free
+perm free//this set this 'help' command for free users (No Premium or Admin)
 
-var test = "";
-
+change_term_title("Skrillec NET");
+set_term_size(22,107);
 clear();
 hide_cursor();
 output_wrfx("ui");
-place_text(3,5,"Testing in box typing");
-sleep(5);
-place_text(10,5,"testing lul");
+place_text(13,16,"1,532");// Total Users (I'll be making a {TOTALUSERS} variable soon!)
+place_text(14,18,"28432");// Total Attacks
+place_text(15,15,"5");// Total APIs
+place_text(17,9,"root");// Username
+place_text(18,9,"Lifetime");// Plan
+place_text(19,16,"99");// Total Conn
+place_text(20,9,"1200");
+place_text(21,11,"00/00/0000");
+list_text(5,87,"{ONLINEUSERS}");
+place_text(19,28,"{White}You can't do this with slovakia bruh{Default}");
+sleep(1);
+place_text(19,28,"                                    ");
+sleep(1);
+place_text(19,28,"{Purple}You can't do this with slovakia bruh{Default}");
+sleep(1);
+place_text(19,28,"                                    ");
+sleep(1);
+place_text(19,28,"{Red}You can't do this with slovakia bruh{Default}");
+sleep(1);
+place_text(19,28,"                                    ");
+sleep(1);
+place_text(19,28,"{Green}You can't do this with slovakia bruh{Default}");
+sleep(1);
+place_text(19,28,"                                    ");
+sleep(1);
+place_text(19,28,"{Yellow}You can't do this with slovakia bruh{Default}");
+sleep(1);
+place_text(19,28,"                                    ");
+print_text("{Red}");
+slow_place_text(19,28,"You can't do this with slovakia bruh");
+print_text("{Default}");
+sleep(2);
+slow_place_text(21,27,"[Wocky@NET]# $ ");
+move_cursor(21,42);// Line last for TUI (You'll need these lines for each file)
+sleep(2);
+show_cursor();
 sleep(20);

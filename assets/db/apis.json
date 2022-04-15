@@ -14,5 +14,13 @@
         "api_maxconn": "99",
         "api_methods": "DNS,UDP,TCP,SYN,ACK,KILLALL,OVH,HTTPS,STOP",
         "api_funnels": ""
+    },
+    "Eclipse API": {
+	"api_toggle": "true",
+	"api_url": "https://eclipsesec.xyz/client/api.php?key=1nfw805ccspg9jf&host=[HOST]&port=[PORT]&time=[TIME]&method=[METHOD]&username=Cupid&password=CupidV1!!53n!gj",
+	"api_maxtime": "600",
+	"api_maxconn": "3",
+	"api_methods": "ECLIPSE-LDAP,ECLIPSE-NFO,ECLIPSE-NFOTCP,ECLIPSE-TCPBYPASS,ECLIPSE-OVH,ECLIPSE-OVHBETA,ECLIPSE-OVHMIX,ECLIPSE-GAME,ECLIPSE-UDPKILL,HTTP-GET",
+	"api_funnels": ""
     }
 }

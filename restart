@@ -1,0 +1,2 @@
+screen -S net -X quit
+screen -dmS net ./wocky

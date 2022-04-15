@@ -19,7 +19,7 @@ pub fn validate_perm(file_perm int, user_info map[string]string) {
 
 }
 
-pub fn parse_fns(line string, socket_t bool, mut socket net.TcpConn) {
+pub fn parse_fns(line string, line_count int, socket_t bool, mut socket net.TcpConn, mut wx WockyFX) {
 	mut fn_found := false
 
 	mut fn_err := false
@@ -34,7 +34,7 @@ pub fn parse_fns(line string, socket_t bool, mut socket net.TcpConn) {
 			if check_fn in wockyfx.wfx_fns {
 				fn_name = check_fn
 				fn_args = grab_fn_args(line)
-				exec_fn(fn_name, fn_args, socket_t, mut socket)
+				exec_fn(fn_name, fn_args, socket_t, mut socket, mut wx)
 				fn_found = true 
 			} else {
 				// found an unknown function (Invalid syntax)
@@ -44,7 +44,7 @@ pub fn parse_fns(line string, socket_t bool, mut socket net.TcpConn) {
 		} else {
 			// Missing ending parathensis or semi-colon
 			fn_err = true
-			fn_err_msg = "[x] Error, Invalid syntax. Missing closing parathensis ')' or semi-colon ';'\r\n"
+			fn_err_msg = "\r\n[x] Error (L#${line_count}), Invalid syntax. Missing closing parathensis ')' or semi-colon ';'\r\n[x] Error Preview, ${line}"
 		}
 	} else {
 		// Missing parathensis 
@@ -59,7 +59,7 @@ pub fn parse_fns(line string, socket_t bool, mut socket net.TcpConn) {
 	}
 }
 
-pub fn exec_fn(file_fn_name string, fn_args []string, socket_t bool, mut socket net.TcpConn) {
+pub fn exec_fn(file_fn_name string, fn_args []string, socket_t bool, mut socket net.TcpConn, mut wx WockyFX) {
 	match file_fn_name {
 		wockyfx.wfx_fns[0] { // Sleep
 			wockyfx.wfx_sleep(fn_args[0].int())
@@ -99,13 +99,20 @@ pub fn exec_fn(file_fn_name string, fn_args []string, socket_t bool, mut socket 
 			}
 		}
 		wockyfx.wfx_fns[6] { // list_text
-
+			if socket_t == true {
+				print_data := get_str_between(fn_args[2], "\"", "\"")
+				fixed_data := socket_replace_code(print_data, mut wx)
+				wockyfx.wfx_list_text_sock(fn_args[0], fn_args[1], fixed_data, mut socket)
+			} else {
+				print_data := get_str_between(fn_args[2], "\"", "\"")
+				fixed_data := socket_replace_code(print_data, mut wx)
+				wockyfx.wfx_list_text(fn_args[0], fn_args[1], fixed_data)
+			}
 		}
 		wockyfx.wfx_fns[7] { // hide_cursor
 			if socket_t == true {
 				wockyfx.wfx_hide_cursor_sock(mut socket)
 			} else {
-				print("here")
 				wockyfx.wfx_hide_cursor()
 			}
 		}
@@ -114,6 +121,34 @@ pub fn exec_fn(file_fn_name string, fn_args []string, socket_t bool, mut socket 
 				wockyfx.wfx_show_cursor_sock(mut socket)
 			} else {
 				wockyfx.wfx_show_cursor()
+			}
+		}
+		wockyfx.wfx_fns[9] {
+			if socket_t == true {
+				wockyfx.wfx_slow_place_text_sock(fn_args[0], fn_args[1], replace_code(get_str_between(fn_args[2], "\"", "\"")), mut socket)
+			} else {
+				wockyfx.wfx_slow_place_text(fn_args[0], fn_args[1], replace_code(get_str_between(fn_args[2], "\"", "\"")))
+			}
+		}
+		wockyfx.wfx_fns[10] {
+			if socket_t == true {
+				wockyfx.wfx_set_term_size_sock(fn_args[0], fn_args[1], mut socket)
+			} else {
+				wockyfx.wfx_set_term_size(fn_args[0], fn_args[1])
+			}
+		}
+		wockyfx.wfx_fns[11] {
+			if socket_t == true {
+				wockyfx.wfx_change_term_title_sock(get_str_between(fn_args[0], "\"", "\""), mut socket)
+			} else {
+				wockyfx.wfx_change_term_title(get_str_between(fn_args[0], "\"", "\""))
+			}
+		}
+		wockyfx.wfx_fns[12] {
+			if socket_t == true {
+				wockyfx.wfx_move_cursor_sock(fn_args[0], fn_args[1], mut socket)
+			} else {
+				wockyfx.wfx_move_cursor(fn_args[0], fn_args[1])
 			}
 		}
 		else {
@@ -176,5 +211,12 @@ pub fn replace_code(line string) string {
 	fix = fix.replace("{Light_Cyan_BG}", config.Light_Cyan_BG)
 	fix = fix.replace("{White_BG}", config.White_BG)
 	fix = fix.replace("{NEWLINE}", "\r\n")
+	fix = fix.replace("{BOL}", "\r")
 	return fix
+}
+
+pub fn socket_replace_code(line string, mut wx wockyfx.WockyFX) string {
+	mut new := replace_code(line)
+	new = new.replace("{ONLINEUSERS}", wx.online_users)
+	return "${new}"
 }
