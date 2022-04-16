@@ -1,5 +1,8 @@
 perm free
 
+change_term_title("Skrillec NET");
+set_term_size(22,107);
+sleep(1);
 clear();
 output_wrfx("ui");
 place_text(21,27, "[Wocky@NET]~ $ ");

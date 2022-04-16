@@ -50,6 +50,7 @@ pub fn validate_perm(file_perm int, user_info map[string]string) {
 }
 
 pub fn parse_fns(line string, filename string, line_count int, socket_t bool, mut socket net.TcpConn, mut wx WockyFX) {
+	if line == "" { return }
 	mut fn_found := false
 
 	mut fn_err := false

@@ -63,7 +63,7 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 
 	socket.write_string(config.Clear) or { 0 }
 	w.clients.add_session(username, mut socket, user_ip, user_port)
-	if wockyfx.check_for_wfx_file("home") {
+	if wockyfx.check_for_wfx_cmd("home") {
 		wockyfx.wockyfx(mut w.wx, "home")
 	} else {
 		socket.write_string("Welcome to Wocky III\r\n") or { 0 }
