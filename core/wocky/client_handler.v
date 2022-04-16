@@ -79,8 +79,8 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 	mut buffer := core.Buffer{}
 	mut reader := io.new_buffered_reader(reader: socket)
 	for {
-		if wockyfx.check_for_wfx_cmd("home") && wockyfx.check_for_wfx_cmd_data("home") {
-			wockyfx.wockyfx(mut w.wx, "home")
+		if wockyfx.check_for_wfx_file("hostname") && wockyfx.check_for_wfx_data("hostname") {
+			wockyfx.wockyfx(mut w.wx, "hostname")
 		} else {
 			socket.write_string("[Wocky@NET]~ $ ") or { 
 				w.clients.remove_session(mut socket)

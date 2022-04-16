@@ -36,7 +36,7 @@ pub fn wfx_output_wrfx_sock(file string, mut s net.TcpConn) {
 
 	for i, line in file_data {
 		mut fix := wockyfx.replace_code(line) // replacing_veriables
-		if i == file_data.len {
+		if i == file_data.len-1 {
 			s.write_string(fix.trim_space()) or { 0 }
 		} else {
 			fix += "\r\n"

@@ -1,5 +1,5 @@
 import os
-import core.term_control.wockyfx
+import core.wockyfx
 
 
 fn main() {

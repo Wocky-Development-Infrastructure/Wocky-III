@@ -1,3 +1,2 @@
 perm free
-
-print_text("");
+slow_place_text(21,27,"[Wocky@NET]# $ ");
