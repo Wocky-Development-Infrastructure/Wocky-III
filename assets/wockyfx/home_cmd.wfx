@@ -1,5 +1,8 @@
 perm free
 
+set_max_arg(4) // Set maximum arguments to 4
+set_err_msg("")
+
 change_term_title("Skrillec NET");
 set_term_size(15,64);
 clear();
