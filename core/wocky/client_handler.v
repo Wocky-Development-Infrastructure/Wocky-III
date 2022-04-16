@@ -78,7 +78,11 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 	mut username, ip, port := w.clients.get_session_info(mut socket)
 	mut buffer := core.Buffer{}
 	mut reader := io.new_buffered_reader(reader: socket)
+	// Grab all commands
+	all_commands := wockyfx.get_all_cmds()
+	mut input_cmd := ""
 	for {
+		// WockyFX Feature. Detecting a hostname file or use default hostname
 		if wockyfx.check_for_wfx_file("hostname") && wockyfx.check_for_wfx_data("hostname") {
 			wockyfx.wockyfx(mut w.wx, "hostname")
 		} else {
@@ -88,41 +92,33 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 				return 
 			}
 		}
-		input_cmd := reader.read_line() or { 
+		// Grabbing input or disconnecting user!
+		input_cmd = reader.read_line() or { 
 			w.clients.remove_session(mut socket)
 			socket.close() or { return }
 			return
 		}
+
+		// Clear LAST Command Typed on Terminal
+		cli_cord := w.terminal.cli_cursor.split(",")
+		term_control.place_text_sock(cli_cord[0], cli_cord[1], utilities.create_empty_str(input_cmd.len), mut socket)
+
+		// Command Handling
 		if input_cmd.replace("\r\n", "").len > 2 {
 			buffer.parse(input_cmd)
 
-			match buffer.cmd {
-				"help", "?" {
-					socket.write_string("working\r\n") or { 
-						w.clients.remove_session(mut socket)
-						socket.close() or { return }
-						return
-					}
+			// Loop throught commands
+			mut cmd_found := false
+			for i, cmd in all_commands {
+				if buffer.cmd == cmd {
+					cmd_found = true
+					wockyfx.wockyfx(mut w.wx, buffer.cmd)
 				}
-				"clear" {
-					socket.write_string(config.Clear) or { 0 }
-				}
-				"stress" {
-					// Stress Usage: stress <ip> <port> <time> <method>
-					if buffer.cmd_args.len < 5 {
-						socket.write_string("[x] Error, Invalid argument\nUsage: stress <ip> <port> <time> <method>") or { 0 }
-					} else {
-						mut api_names, api_urls/*, api_maxtime, api_conn*/ := crud.read_apis_with_method_alt(buffer.cmd_args[4])
-						t := attack_system.send_api_attack(buffer.cmd_args[1], buffer.cmd_args[2], buffer.cmd_args[3], buffer.cmd_args[4], db_user_info, mut w.sqlconn, api_names, api_urls)
-						socket.write_string(t) or { 0 }
-					}
-				} else {
-					socket.write_string("[x] Command not found!\r\n") or { 
-						w.clients.remove_session(mut socket)
-						socket.close() or { return }
-						return
-					}
-				}
+			}
+
+			if cmd_found == false {
+				cord := w.terminal.cnc_output_position.split(",")
+				term_control.place_text_sock(cord[0], cord[1], "[x] Invalid Command", mut socket)
 			}
 		}
 	}

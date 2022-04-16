@@ -1,7 +1,7 @@
 perm free
 
 change_term_title("Skrillec NET");
-set_term_size(22,107);
-sleep(1);
+set_term_size(15,64);
 clear();
+print_text("{Default}");
 output_wrfx("ui");

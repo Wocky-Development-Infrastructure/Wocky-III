@@ -4,7 +4,6 @@ import os
 import net
 import config
 
-
 pub struct WockyFX {
 	pub mut:
 		current_output	string

@@ -14,7 +14,7 @@ import wockyfx
 
 pub struct Wocky {
 	pub mut:
-		client_port		int = 1337
+		client_port		int = 54543
 		bot_port		int
 		sqlconn			&mysql.Connection
 		terminal 		&core.Terminal

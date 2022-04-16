@@ -19,6 +19,17 @@ pub fn check_for_wfx_cmd(filename string) bool {
 	return false
 }
 
+pub fn get_all_cmds() []string {
+	all_files := os.ls(os.getwd() + "/assets/wockyfx") or { [''] }
+	mut all_commands := []string
+	for i, file in all_files {
+		if file.ends_with("_cmd.wfx") {
+			all_commands << file.replace("_cmd.wfx", "")
+		}
+	}
+	return all_commands
+}
+
 pub fn check_for_wfx_cmd_data(filename string) bool {
 	mut file := os.read_file(os.getwd() + "/assets/wockyfx/${filename}_cmd.wfx") or { "" }
 	if file == "" || file.len == 0 {
@@ -253,5 +264,6 @@ pub fn replace_code(line string) string {
 pub fn socket_replace_code(line string, mut wx wockyfx.WockyFX) string {
 	mut new := replace_code(line)
 	new = new.replace("{ONLINEUSERS}", wx.online_users)
+	new = new.replace("{LASTCMD}", wx.fcmd)
 	return "${new}"
 }

@@ -15,18 +15,18 @@
     "Design": {
         "Terminal": {
             "title": "Wocky III BETA Mode ~ ( In Development ) ~ | By: Erupt The eGod & Lamp The Dev",
-            "size": "50,90"
+            "size": "20,80"
         },
         "Hostname": {
             "hostname": "",
             "hostname_position": "",
-            "cli_cursor": ""
+            "cli_cursor": "21,42"
         },
         "CNC": {
-            "cnc_output_position": "",
+            "cnc_output_position": "8,39",
             "max_output_rows": "",
             "max_output_width": "",
-            "last_cmd_output": "",
+            "last_cmd_output": "7,43",
             "cmd_response_output": ""
         },
         "online_list": {
