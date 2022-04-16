@@ -10,6 +10,7 @@ import wocky
 import config
 import utilities
 import term_control
+import wockyfx
 
 pub struct Wocky {
 	pub mut:
@@ -18,6 +19,7 @@ pub struct Wocky {
 		sqlconn			&mysql.Connection
 		terminal 		&core.Terminal
 		clients			&core.Clients
+		wx				&wockyfx.WockyFX
 }
 
 pub fn start_wocky(mut w Wocky) {
@@ -36,11 +38,11 @@ pub fn (mut w Wocky) listener(mut server net.TcpListener) {
 			panic("${config.Red}[${utilities.current_time()}][+]${config.Red} Error, Unable to accept client's connection!")
 		}
 		socket.set_read_timeout(time.infinite)
-		socket.write_string(config.Clear) or { 0 }
 		user_addr := socket.peer_addr() or { return } // This should almost never return an err
 		user_ip := "${user_addr}".replace("[::ffff:","").split("]:")[0]
 		user_port := "${user_addr}".split("]:")[1]
 		println("${config.Green}[${utilities.current_time()}][+]${config.Default} New connection established. IP: ${user_ip}:${user_port}...")
+		w.wx.enable_socket_mode(mut socket)
 		go wocky.connection_handler(mut socket, mut &w)
 	}
 }

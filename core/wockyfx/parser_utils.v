@@ -3,7 +3,37 @@ module wockyfx
 import os
 import net
 import wockyfx
-import core.config
+import config
+
+pub fn check_for_wfx_file(filename string) bool {
+	if os.exists(os.getwd() + "/assets/wockyfx/${filename}.wfx") {
+		return true
+	}
+	return false
+}
+
+pub fn check_for_wfx_cmd(filename string) bool {
+	if os.exists(os.getwd() + "/assets/wockyfx/${filename}_cmd.wfx") {
+		return true
+	}
+	return false
+}
+
+pub fn check_for_wfx_cmd_data(filename string) bool {
+	mut file := os.read_file(os.getwd() + "/assets/wockyfx/${filename}_cmd.wfx") or { "" }
+	if file == "" || file.len == 0 {
+		return false
+	}
+	return true
+}
+
+pub fn check_for_wfx_data(filename string) bool {
+	mut file := os.read_file(os.getwd() + "/assets/wockyfx/${filename}.wfx") or { "" }
+	if file == "" || file.len == 0 {
+		return false
+	}
+	return true
+}
 
 pub fn parse_perm(line string) int {
 	if line.starts_with("perm ") {
@@ -19,7 +49,7 @@ pub fn validate_perm(file_perm int, user_info map[string]string) {
 
 }
 
-pub fn parse_fns(line string, line_count int, socket_t bool, mut socket net.TcpConn, mut wx WockyFX) {
+pub fn parse_fns(line string, filename string, line_count int, socket_t bool, mut socket net.TcpConn, mut wx WockyFX) {
 	mut fn_found := false
 
 	mut fn_err := false
@@ -34,28 +64,32 @@ pub fn parse_fns(line string, line_count int, socket_t bool, mut socket net.TcpC
 			if check_fn in wockyfx.wfx_fns {
 				fn_name = check_fn
 				fn_args = grab_fn_args(line)
+				if fn_err == true && fn_err_msg.split("\n").len > 2 {
+					print(fn_err_msg)
+					return
+				}
 				exec_fn(fn_name, fn_args, socket_t, mut socket, mut wx)
 				fn_found = true 
 			} else {
 				// found an unknown function (Invalid syntax)
 				fn_err = true
-				fn_err_msg = "[x] Error, Found an unknown function (Invalid syntax)\r\n"
+				fn_err_msg = "[x] Error (FILE:${filename}|L#${line_count}), Found an unknown function (Invalid syntax)\r\n"
 			}
 		} else {
 			// Missing ending parathensis or semi-colon
 			fn_err = true
-			fn_err_msg = "\r\n[x] Error (L#${line_count}), Invalid syntax. Missing closing parathensis ')' or semi-colon ';'\r\n[x] Error Preview, ${line}"
+			fn_err_msg = "\r\n[x] Error (FILE:${filename}|L#${line_count}), Invalid syntax. Missing closing parathensis ')' or semi-colon ';'\r\n[x] Error Preview, ${line}"
 		}
 	} else {
 		// Missing parathensis 
 		fn_err = true
-		fn_err_msg = "[x] Error, Invalid Syntax. Missing opening parathensis '('\r\n"
+		fn_err_msg = "[x] Error (FILE:${filename}|L#${line_count}), Invalid Syntax. Missing opening parathensis '('\r\n"
 	}
 
 	if fn_err == true {
 		// list errs and exit
 		print(fn_err_msg)
-		exit(0)
+		return
 	}
 }
 

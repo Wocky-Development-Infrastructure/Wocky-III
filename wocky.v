@@ -16,6 +16,7 @@ import core.config
 import core.wocky
 import core.utilities
 import core.term_control
+import core.wockyfx
 
 fn main() {
 	mut t := core.Terminal{}
@@ -24,7 +25,7 @@ fn main() {
 	mut w := wocky.Wocky{sqlconn: &mysql.Connection{
 		username: "root",
 		dbname: "wocky3"
-	}, terminal: &t, clients: &core.Clients{}}
+	}, terminal: &t, clients: &core.Clients{}, wx: &wockyfx.WockyFX{}}
 	mut args := os.args.clone()
 	for i, arg in args {
 		match arg {

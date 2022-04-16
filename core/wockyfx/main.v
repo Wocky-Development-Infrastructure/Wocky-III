@@ -2,8 +2,7 @@ module wockyfx
 
 import os
 import net
-import core.config
-import core.wocky
+import config
 
 
 pub struct WockyFX {
@@ -73,8 +72,17 @@ pub fn (mut wx WockyFX) enable_socket_mode(mut s net.TcpConn) {
 	wx.socket = s
 }
 
+pub fn (mut wx WockyFX) disable_socket_mode() {
+	wx.socket_toggle = false
+}
+
 pub fn wockyfx(mut wx WockyFX, file string) {
-	mut ui := os.read_lines(os.getwd() + "/assets/wockyfx/${file}.wfx") or { [''] }
+	mut ui := []string
+	if wockyfx.check_for_wfx_file(file) {
+		ui = os.read_lines(os.getwd() + "/assets/wockyfx/${file}.wfx") or { [''] }
+	} else if wockyfx.check_for_wfx_cmd(file) {
+		ui = os.read_lines(os.getwd() + "/assets/wockyfx/${file}_cmd.wfx") or { [''] }
+	}
 	// Validating perm key in free line
 
 	mut file_perm := 0
@@ -84,12 +92,12 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 			file_perm = wockyfx.parse_perm(ui[0])
 			if file_perm > wx.perm {
 				println("[x] Error, This command is for a high rank....!")
-				exit(0)
+				return
 			}
 		} else {
 			// err and exit
 			println("[x] Error, No perms found for this command")
-			exit(0)
+			return
 		}
 	}
 	
@@ -99,31 +107,32 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 	mut fn_found := false
 	for i, linee in ui {
 		mut line := linee
-		if line == "" { continue }
-		if line.starts_with("perm") { continue }
-		if line.contains("//") {
-			line = line.split("//")[0]
-		}
-
-		if line.starts_with(wfx_loops[0]) {
-			// parse for loop (later)
-		} else if line.starts_with("var") {
-			// parse variable
-		} else {
-			for d, fn_n in wfx_fns {
-				if line.starts_with(fn_n) {
-					wockyfx.parse_fns(line, i, wx.socket_toggle, mut wx.socket, mut wx)
-					fn_found = true
-				}
+		if line != "" { 
+			if line.starts_with("perm") { continue }
+			if line.contains("//") {
+				line = line.split("//")[0]
 			}
 
-			if fn_found == false {
-				// output text (no functions or for loop)
-				mut fix := wockyfx.replace_code(line)
-				if wx.socket_toggle == true {
-					wx.socket.write_string(fix) or { 0 }
-				} else {
-					// print(fix)
+			if line.starts_with(wfx_loops[0]) {
+				// parse for loop (later)
+			} else if line.starts_with("var") {
+				// parse variable
+			} else {
+				for d, fn_n in wfx_fns {
+					if line.starts_with(fn_n) {
+						wockyfx.parse_fns(line, file, i, wx.socket_toggle, mut wx.socket, mut wx)
+						fn_found = true
+					}
+				}
+
+				if fn_found == false {
+					// output text (no functions or for loop)
+					mut fix := wockyfx.replace_code(line)
+					if wx.socket_toggle == true {
+						wx.socket.write_string(fix) or { 0 }
+					} else {
+						// print(fix)
+					}
 				}
 			}
 		}
