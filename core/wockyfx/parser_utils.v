@@ -60,6 +60,32 @@ pub fn validate_perm(file_perm int, user_info map[string]string) {
 
 }
 
+pub fn check_for_max_arg(mut wx WockyFX) {
+	mut new_code := []string
+	mut set_max := false
+	mut set_err_msg := false
+	for i, line in wx.file_data {
+		if line != "" {
+			if line.starts_with(wockyfx.wfx_fns[16]) {
+				set_max = true
+				if wx.file_data[i+1].starts_with(wockyfx.wfx_fns[17]) {
+					set_err_msg = true
+				}
+			} else {
+				new_code << line
+			}
+		} else {
+			new_code << line
+		}
+	}
+	if set_max == true && set_err_msg == false {
+		println("[x] Error, Must use set_arg_err_msg(\"\"); in order to use set_max_arg(c);!")
+		return
+	}
+	println("Code Updated")
+	wx.file_data = new_code
+}
+
 pub fn parse_fns(line string, filename string, line_count int, socket_t bool, mut socket net.TcpConn, mut wx WockyFX) {
 	if line == "" { return }
 	mut fn_found := false

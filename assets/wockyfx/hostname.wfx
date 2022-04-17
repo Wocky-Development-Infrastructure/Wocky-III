@@ -1,3 +1,5 @@
 perm free
 
 place_text(19,3,"[Wocky@NET]# $ ");
+place_text(19,18,"                               ");
+move_cursor(19,18);

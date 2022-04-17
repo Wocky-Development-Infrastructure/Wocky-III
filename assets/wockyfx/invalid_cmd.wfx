@@ -2,4 +2,4 @@ perm free
 
 clear();
 output_wrfx("ui");
-place_text(13,5,"[x] Error, Invalid command!");
+place_text(13,5,"[x] Error:  Invalid command!");

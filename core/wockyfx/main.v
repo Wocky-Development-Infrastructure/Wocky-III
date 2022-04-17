@@ -48,7 +48,10 @@ pub const (
 						'change_term_title', // 11
 						'move_cursor', // 12
 						'send_attack', // 13
-						'include_wfx' // 14
+						'include_wfx', // 14
+						'geo_ip', // 15
+						'set_max_arg', // 16
+						'set_arg_err_msg' // 17
 						]
 	wfx_loops		= ['for']
 )
@@ -106,12 +109,15 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 			return
 		}
 	}
+
+	
+	wockyfx.check_for_max_arg(mut wx)
 	
 	/*
 		Variable are replaced so function names and for key is what we need to parse here
 	*/
 	mut fn_found := false
-	for i, linee in ui {
+	for i, linee in wx.file_data {
 		mut line := linee
 		if line != "" { 
 			if line.starts_with("perm") { continue }
