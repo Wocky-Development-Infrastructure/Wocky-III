@@ -1,7 +1,5 @@
 module logger
 
-
-
 import os
 import time
 
