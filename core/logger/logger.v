@@ -24,3 +24,8 @@ pub fn attack_log(user string, user_ip string, ip string, port string, duration 
 	mut time := time.now()
 	log2file("attacks", "[$timee][Attack Info]: $user | ${user_ip} | $ip:$port $duration $method\r\n")
 }
+
+pub fn command_log(user string, command string) {
+	mut time := time.now()
+	log2file("cmds", "[$timee][Command Info]: $user just ran // $command\r\n")
+}
