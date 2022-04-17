@@ -6,6 +6,9 @@ import config
 
 pub struct WockyFX {
 	pub mut:
+		file			string
+		file_data		[]string
+
 		current_output	string
 		perm			int
 
@@ -44,7 +47,9 @@ pub const (
 						'set_term_size', // 10
 						'change_term_title', // 11
 						'move_cursor', // 12
-						'send_attack']
+						'send_attack', // 13
+						'include_wfx' // 14
+						]
 	wfx_loops		= ['for']
 )
 
@@ -82,6 +87,8 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 	} else if wockyfx.check_for_wfx_cmd(file) {
 		ui = os.read_lines(os.getwd() + "/assets/wockyfx/${file}_cmd.wfx") or { [''] }
 	}
+	wx.file = file
+	wx.file_data = ui
 	// Validating perm key in free line
 
 	mut file_perm := 0

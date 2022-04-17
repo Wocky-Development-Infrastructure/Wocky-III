@@ -4,7 +4,9 @@ set_max_arg(4) // Set maximum arguments to 4
 set_err_msg("")
 
 change_term_title("Skrillec NET");
-set_term_size(15,64);
+set_term_size(20,80);
+print_text("{Red}");
+slow_place_text(9,23,"Loading Wocky......");
 clear();
 print_text("{Default}");
 output_wrfx("ui");

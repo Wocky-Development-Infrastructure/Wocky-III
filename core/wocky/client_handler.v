@@ -106,10 +106,12 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 		// Command Handling
 		if input_cmd.replace("\r\n", "").len > 2 {
 			buffer.parse(input_cmd)
+			w.wx.add_buffer_info(buffer.full_cmd, buffer.cmd, buffer.cmd_args)
 
 			// Loop throught commands
 			mut cmd_found := false
 			for i, cmd in all_commands {
+				println(cmd + " | " + buffer.cmd)
 				if buffer.cmd == cmd {
 					cmd_found = true
 					wockyfx.wockyfx(mut w.wx, buffer.cmd)
@@ -117,8 +119,7 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 			}
 
 			if cmd_found == false {
-				cord := w.terminal.cnc_output_position.split(",")
-				term_control.place_text_sock(cord[0], cord[1], "[x] Invalid Command", mut socket)
+				wockyfx.wockyfx(mut w.wx, "invalid")
 			}
 		}
 	}

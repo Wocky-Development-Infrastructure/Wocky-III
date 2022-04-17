@@ -31,6 +31,14 @@ pub fn wfx_output_wrfx(file string) {
 	}
 }
 
+pub fn wfx_output_wfx(mut wx wockyfx.WockyFX, file string) {
+	wockyfx.wockyfx(mut wx, file)
+}
+
+pub fn wfx_output_wfx_sock(mut wx wockyfx.WockyFX, file string) {
+	wockyfx.wockyfx(mut wx, file)
+}
+
 pub fn wfx_output_wrfx_sock(file string, mut s net.TcpConn) {
 	mut file_data := os.read_lines(os.getwd() + "/assets/wockyfx/wrfx/${file}.wrfx") or { [''] }
 
@@ -100,7 +108,7 @@ pub fn wfx_hide_cursor() {
 }
 
 pub fn wfx_hide_cursor_sock(mut s net.TcpConn) {
-	s.write_string("\033[?251") or { 0 }
+	s.write_string("\033[?25l") or { 0 }
 }
 
 pub fn wfx_show_cursor() {

@@ -1,0 +1,6 @@
+perm free
+
+set_max_arg(1);
+set_err_msg("[x] Error, Invalid argument");
+
+print_text("");
