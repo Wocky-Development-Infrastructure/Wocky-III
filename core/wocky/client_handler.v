@@ -98,11 +98,7 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 			socket.close() or { return }
 			return
 		}
-
-		// Clear LAST Command Typed on Terminal
-		cli_cord := w.terminal.cli_cursor.split(",")
-		term_control.place_text_sock(cli_cord[0], cli_cord[1], utilities.create_empty_str(input_cmd.len), mut socket)
-
+		
 		// Command Handling
 		if input_cmd.replace("\r\n", "").len > 2 {
 			buffer.parse(input_cmd)
@@ -111,7 +107,6 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 			// Loop throught commands
 			mut cmd_found := false
 			for i, cmd in all_commands {
-				println(cmd + " | " + buffer.cmd)
 				if buffer.cmd == cmd {
 					cmd_found = true
 					wockyfx.wockyfx(mut w.wx, buffer.cmd)

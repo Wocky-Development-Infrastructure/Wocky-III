@@ -1,4 +1,4 @@
-perm free//this set this 'help' command for free users (No Premium or Admin)
+perm free
 
 hide_cursor();
 clear();

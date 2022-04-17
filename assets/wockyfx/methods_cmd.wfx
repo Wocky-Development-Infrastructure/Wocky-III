@@ -1,6 +1,5 @@
 perm free
 
-//output_wrfx("clear");
 clear();
 output_wrfx("ui");
 print_text("{Default}");
