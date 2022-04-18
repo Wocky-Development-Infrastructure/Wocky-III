@@ -42,5 +42,3 @@ Wocky is an advanced botnet build created for users to design their own CNC on t
 # Wocky CNC
 With Wocky, we provide an interpreter language called WockyFX so you can design and control your own commands. Unlike any other CNC/Botnet out you can create commands to geo locate, port scan, send attack or display a menu on the terminal by creating a wfx file! More info about WockyFX [Here](https://github.com/Skrillec-Security/Wocky-III/tree/main/core/wockyfx)
 # Wocky Bot
-
-# WockyFX
