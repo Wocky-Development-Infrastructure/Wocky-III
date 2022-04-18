@@ -21,6 +21,13 @@ Wocky is an advanced botnet build created for users to design their own CNC on t
     * [Attack System](https://github.com/Skrillec-Security/Wocky-III/tree/main/core/attack_system) {✔️}
 * [BOT Server](#wocky-bot)
 * [WockyFX](#wockyfx)
+    * [Variables](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L30) {✔️}
+    * [Functions](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L37)
+        * [Function argument Count Checker for errors]
+        * [Parse function argument datatypes]
+    * [For loop](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L56)
+    * [Required Used 'perm' Key Or Exit](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L100) {✔️}
+    * [Required to use set_arg_err_msg() when using set_max_arg()](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L114) {✔️}
         </td>
     </tr>
 </table>
