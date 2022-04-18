@@ -10,7 +10,7 @@ Wocky is an advanced botnet build created for users to design their own CNC on t
 ❌ Haven't started | [🚧] In Development | ✔️ Finished
 <table>
     <tr>
-        <td width=40% valign=top>
+        <td width=45% valign=top>
 
 * [CNC Server](#wocky-cnc)
     * [CNC Base](https://github.com/Skrillec-Security/Wocky-III/tree/main/core/wocky/client_cnc.v) {✔️}
@@ -21,7 +21,7 @@ Wocky is an advanced botnet build created for users to design their own CNC on t
     * [Attack System](https://github.com/Skrillec-Security/Wocky-III/tree/main/core/attack_system) {✔️}
 * [BOT Server](#wocky-bot)
         </td>
-        <td width=40% valign=top>
+        <td width=35% valign=top>
 * [WockyFX](#wockyfx)
     * [Variables](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L30) {✔️}
     * [Functions](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L37)
