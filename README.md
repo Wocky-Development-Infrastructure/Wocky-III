@@ -27,7 +27,7 @@ Wocky is an advanced botnet build created for users to design their own CNC on t
     * Scanners {❌}
         </td>
         <td width=50% valign=top>
-* [WockyFX](#wockyfx)
+* [WockyFX](https://github.com/Skrillec-Security/Wocky-III/tree/main/core/wockyfx)
     * [Variables](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L30) {✔️}
     * [Functions](https://github.com/Skrillec-Security/Wocky-III/blob/750b5878382f6eca0e3bbec41d4620fdddc9dedf/core/wockyfx/main.v#L37) {🚧}
         * [Function argument Count Checker for errors] {❌}
