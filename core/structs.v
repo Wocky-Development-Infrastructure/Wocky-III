@@ -64,7 +64,7 @@ pub fn (mut c Clients) add_session(username string, mut socket net.TcpConn, ip s
 	c.u_sockets << (mut socket)
 	c.u_ips << ip
 	c.u_ports << port
-
+	println("User added. Total Users: ${c.count}")
 }
 
 pub fn (mut c Clients) get_session_info(mut s net.TcpConn) (string, string, string) {
@@ -86,4 +86,5 @@ pub fn (mut c Clients) remove_session(mut s net.TcpConn) {
 		}
 	}
 	c.count-=1
+	println("User removed. Total Users: ${c.count}")
 }

@@ -1,6 +1,7 @@
 perm free
 
-place_text(12,11,"Username:  {Red}║                      {Default_BG}{Red}║{Default}");
-place_text(11,22,"{Red}╔══════════════════════╗{Default}");
-place_text(13,22,"{Red}╚══════════════════════╝{Default}");
-move_cursor(12,24);
+output_wrfx("logo");
+place_text(12,19,"Username:  {Red}║                      {Default_BG}{Red}║{Default}");
+place_text(11,30,"{Red}╔══════════════════════╗{Default}");
+place_text(13,30,"{Red}╚══════════════════════╝{Default}");
+move_cursor(12,32);

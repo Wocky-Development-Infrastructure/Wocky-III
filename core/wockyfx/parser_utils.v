@@ -56,19 +56,60 @@ pub fn parse_perm(line string) int {
 	return 0
 }
 
+// get_callback_code("attack", "set_arg_err_msg")
+// returning exit_code, []"code"
+pub fn get_callback_code(file string, function string) (int, []string) {
+	mut file_data := []string
+	if wockyfx.check_for_wfx_file(file) {
+		file_data = os.read_lines(os.getwd() + "/assets/wockyfx/${file}.wfx") or { [''] }
+	} else if wockyfx.check_for_wfx_cmd(file) {
+		file_data = os.read_lines(os.getwd() + "/assets/wockyfx/${file}_cmd.wfx") or { [''] }
+	}
+
+	mut new_code := []string
+	for i, line in file_data {
+		if line != "" {
+			if line.starts_with(function) {
+				if line.ends_with("(fn() => {") {} else { return 0, [''] }
+				mut start_here := i+1
+				for new_line in start_here..file_data.len {
+					if file_data[new_line] == "});" {
+						return 1, new_code
+					} else {
+						new_code << file_data[new_line].trim_space()
+					}
+				}
+			}
+		}
+	}
+	return 0, ['']
+}
+
 pub fn validate_perm(file_perm int, user_info map[string]string) {
 
 }
 
-pub fn check_for_max_arg(mut wx WockyFX) {
+pub fn check_for_max_arg(mut wx WockyFX) (int, string) {
+	// New file's code removing the 2 argument functions from content
 	mut new_code := []string
+
+	// Info from file
+	mut max_arg := 0
+	mut max_arg_err := ""
+
+	// Check points for the loop
 	mut set_max := false
 	mut set_err_msg := false
+
 	for i, line in wx.file_data {
 		if line != "" {
 			if line.starts_with(wockyfx.wfx_fns[16]) {
+				max_arg = get_str_between(line, "(", ")").int()
 				set_max = true
 				if wx.file_data[i+1].starts_with(wockyfx.wfx_fns[17]) {
+					arg := get_str_between(wx.file_data[i+1], "(", ")")
+					max_arg_err = get_str_between(arg, "\"", "\"")
+					println(max_arg_err)
 					set_err_msg = true
 				}
 			} else {
@@ -80,10 +121,10 @@ pub fn check_for_max_arg(mut wx WockyFX) {
 	}
 	if set_max == true && set_err_msg == false {
 		println("[x] Error, Must use set_arg_err_msg(\"\"); in order to use set_max_arg(c);!")
-		return
+		return max_arg, max_arg_err
 	}
-	println("Code Updated")
 	wx.file_data = new_code
+	return max_arg, max_arg_err
 }
 
 pub fn parse_fns(line string, filename string, line_count int, socket_t bool, mut socket net.TcpConn, mut wx WockyFX) {
@@ -221,6 +262,11 @@ pub fn exec_fn(file_fn_name string, fn_args []string, socket_t bool, mut socket 
 				wockyfx.wfx_move_cursor_sock(fn_args[0], fn_args[1], mut socket)
 			} else {
 				wockyfx.wfx_move_cursor(fn_args[0], fn_args[1])
+			}
+		}
+		wockyfx.wfx_fns[13] {
+			if socket_t == true {
+
 			}
 		}
 		else {

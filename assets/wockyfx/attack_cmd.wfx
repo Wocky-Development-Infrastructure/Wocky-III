@@ -1,2 +1,12 @@
 perm free
 
+set_max_arg(5);
+set_arg_err_msg(fn() => {
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
+});
+
+place_text(13,9,"Test");

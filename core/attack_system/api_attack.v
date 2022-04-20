@@ -5,6 +5,10 @@ import net.http
 
 import crud
 
+pub fn wfx_send_api_attack(ip string, port string, time string, method string, user_info map[string]string, mut sql mysql.Connection, api_names []string, api_urls []string) {
+	send_api_attack(ip, port, time, method, user_info, mut sql, api_names, api_urls)
+}
+
 pub fn send_api_attack(ip string, port string, time string, method string, user_info map[string]string, mut sql mysql.Connection, api_names []string, api_urls []string) string {
 	// mut attack_msg := ""
 	// if user_info['ongoing'] < user_info['conn'] {

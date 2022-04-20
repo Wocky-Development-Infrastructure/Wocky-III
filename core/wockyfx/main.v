@@ -3,6 +3,7 @@ module wockyfx
 import os
 import net
 import config
+import utilities
 
 pub struct WockyFX {
 	pub mut:
@@ -56,6 +57,14 @@ pub const (
 	wfx_loops		= ['for']
 )
 
+pub fn (mut wx WockyFX) set_file(file string) {
+	if wockyfx.check_for_wfx_file(file) {
+		wx.file_data = os.read_lines(os.getwd() + "/assets/wockyfx/${file}.wfx") or { [''] }
+	} else if wockyfx.check_for_wfx_cmd(file) {
+		wx.file_data = os.read_lines(os.getwd() + "/assets/wockyfx/${file}_cmd.wfx") or { [''] }
+	}
+}
+
 pub fn (mut wx WockyFX) add_variable(var_name string, var_value string) {
 	wx.variables[var_name] = var_value
 }
@@ -81,6 +90,22 @@ pub fn (mut wx WockyFX) enable_socket_mode(mut s net.TcpConn) {
 
 pub fn (mut wx WockyFX) disable_socket_mode() {
 	wx.socket_toggle = false
+}
+
+pub fn wfx_parse_callback(mut wx WockyFX, file string, function string) {
+
+	exit_code, new_code := wockyfx.get_callback_code(file, function)
+	mut new_filecode := ""
+	for i, line_code in new_code {
+		new_filecode += "${line_code}\n"
+	}
+
+	new_filename := utilities.create_random_str(10)
+
+	os.write_file(os.getwd() + "/assets/wockfx/${new_filename}.wfx", new_filecode) or { panic("Failed") }
+
+	wockyfx(mut wx, new_filename)
+	os.execute("rm -rf ${new_filename}")
 }
 
 pub fn wockyfx(mut wx WockyFX, file string) {
@@ -111,7 +136,7 @@ pub fn wockyfx(mut wx WockyFX, file string) {
 	}
 
 	
-	wockyfx.check_for_max_arg(mut wx)
+	mut max, err := wockyfx.check_for_max_arg(mut wx)
 	
 	/*
 		Variable are replaced so function names and for key is what we need to parse here

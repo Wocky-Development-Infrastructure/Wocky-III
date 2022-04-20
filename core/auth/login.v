@@ -17,6 +17,7 @@ pub fn login(username string, password string, user_ip string, mut sql mysql.Con
 	
 	encrypted_pw := sha1.sum(password.bytes()).hex()
 	
+	println("${info}\r\n${username} | ${password}")
 	if info['username'] == username {
 		if info['password'] == encrypted_pw {
 			return 1, info
