@@ -101,11 +101,12 @@ pub fn wfx_parse_callback(mut wx WockyFX, file string, function string) {
 	}
 
 	new_filename := utilities.create_random_str(10)
-
-	os.write_file(os.getwd() + "/assets/wockfx/${new_filename}.wfx", new_filecode) or { panic("Failed") }
+	
+	filepath := os.getwd() + "/assets/wockyfx/${new_filename}.wfx"
+	os.write_file(filepath, new_filecode) or { panic("Failed") }
 
 	wockyfx(mut wx, new_filename)
-	os.execute("rm -rf ${new_filename}")
+	os.execute("sudo rm -rf ${filepath}").output
 }
 
 pub fn wockyfx(mut wx WockyFX, file string) {

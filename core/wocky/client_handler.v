@@ -25,6 +25,7 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	user_ip := "${user_addr}".replace("[::ffff:","").split("]:")[0]
 	user_port := "${user_addr}".split("]:")[1]
 	if wockyfx.check_for_wfx_file("upon_connect") && wockyfx.check_for_wfx_data("upon_connect") {
+		w.wx.enable_socket_mode(mut socket)
 		wockyfx.wockyfx(mut w.wx, "upon_connect")
 	}
 
@@ -32,8 +33,10 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	mut password := ""
 
 	if wockyfx.check_for_wfx_file("username_login") && wockyfx.check_for_wfx_file("password_login") {
+		w.wx.enable_socket_mode(mut socket)
 		wockyfx.wockyfx(mut w.wx, "username_login")
 		username = reader.read_line() or { "" }
+		w.wx.enable_socket_mode(mut socket)
 		wockyfx.wockyfx(mut w.wx, "password_login")
 		password = reader.read_line() or { "" }
 	} else {
@@ -66,6 +69,7 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 
 	w.clients.add_session(username, mut socket, user_ip, user_port)
 	if wockyfx.check_for_wfx_cmd("home") {
+		w.wx.enable_socket_mode(mut socket)
 		wockyfx.wockyfx(mut w.wx, "home")
 	} else {
 		socket.write_string("Welcome to Wocky III\r\n") or { 0 }
@@ -83,9 +87,13 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 	// Grab all commands
 	all_commands := wockyfx.get_all_cmds()
 	mut input_cmd := ""
+	w.wx.enable_socket_mode(mut socket)
 	for {
+		wockyfx.wfx_place_text_sock("13", "5", "${username}", mut socket)
+		w.wx.enable_socket_mode(mut socket)
 		// WockyFX Feature. Detecting a hostname file or use default hostname
 		if wockyfx.check_for_wfx_file("hostname") && wockyfx.check_for_wfx_data("hostname") {
+		w.wx.enable_socket_mode(mut socket)
 			wockyfx.wockyfx(mut w.wx, "hostname")
 		} else {
 			socket.write_string("[Wocky@NET]~ $ ") or { 
@@ -100,6 +108,7 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 			socket.close() or { return }
 			return
 		}
+		w.wx.enable_socket_mode(mut socket)
 		
 		// Command Handling
 		if input_cmd.replace("\r\n", "").len > 2 {
@@ -115,7 +124,8 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 						wockyfx.wfx_parse_callback(mut w.wx, "attack", "set_arg_err_msg")
 					} else {
 						mut api_names, api_urls/*, api_maxtime, api_conn*/ := crud.read_apis_with_method_alt(buffer.cmd_args[4])
-						t := attack_system.send_api_attack(buffer.cmd_args[1], buffer.cmd_args[2], buffer.cmd_args[3], buffer.cmd_args[4], db_user_info, mut w.sqlconn, api_names, api_urls)
+						exit_c, t := attack_system.send_api_attack(buffer.cmd_args[1], buffer.cmd_args[2], buffer.cmd_args[3], buffer.cmd_args[4], db_user_info, mut w.sqlconn, api_names, api_urls)
+						w.wx.enable_socket_mode(mut socket)
 						wockyfx.wockyfx(mut w.wx, "attack")
 						// socket.write_string(t) or { 0 }
 					}
@@ -126,15 +136,18 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 				for i, cmd in all_commands {
 					if buffer.cmd == cmd {
 						cmd_found = true
+						w.wx.enable_socket_mode(mut socket)
 						wockyfx.wockyfx(mut w.wx, buffer.cmd)
 					}
 				}
 
 				if cmd_found == false {
+					w.wx.enable_socket_mode(mut socket)
 					wockyfx.wockyfx(mut w.wx, "invalid")
 				}
 			}
 		}
+		println(input_cmd)
 	}
 
 }

@@ -16,7 +16,7 @@ pub fn create_empty_str(char_count int) string {
 }
 
 pub fn create_random_str(c int) string {
-    chars := "qwertyuiopasdfghjklzxcvbnm1234567890-=[]\;',./`~!@#$%^&*()_+{}|:\"<>?QWERTYUIOPASDFGHJKLZXCVBNM"
+    chars := "qwertyuiopasdfghjklzxcvbnm1234567890QWERTYUIOPASDFGHJKLZXCVBNM"
     mut new_str := ""
     for i in 0..c {
         random_num := rand.int_in_range(0, chars.len) or { 0 }

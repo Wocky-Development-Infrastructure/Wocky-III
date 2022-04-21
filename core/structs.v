@@ -12,6 +12,12 @@ pub struct Clients {
 		u_ports		[]string
 }
 
+pub struct CaptureAttacker {
+	pub mut:
+		sus_type		[]string
+		sus_buffers		[]string
+}
+
 pub struct Buffer {
 	pub mut:
 		full_cmd	string
@@ -64,7 +70,8 @@ pub fn (mut c Clients) add_session(username string, mut socket net.TcpConn, ip s
 	c.u_sockets << (mut socket)
 	c.u_ips << ip
 	c.u_ports << port
-	println("User added. Total Users: ${c.count}")
+	time := (os.execute("sudo timedatectl set-timezone America/New_York; date +\"%m/%d/%y-%R\"").output).trim_space()
+	println("\x1b[32m[${time}][+]\x1b[39m User added. Total Users: ${c.count}")
 }
 
 pub fn (mut c Clients) get_session_info(mut s net.TcpConn) (string, string, string) {
@@ -86,5 +93,6 @@ pub fn (mut c Clients) remove_session(mut s net.TcpConn) {
 		}
 	}
 	c.count-=1
-	println("User removed. Total Users: ${c.count}")
+	time := (os.execute("sudo timedatectl set-timezone America/New_York; date +\"%m/%d/%y-%R\"").output).trim_space()
+	println("\x1b[31m[${time}][x]\x1b[39m User removed. Total Users: ${c.count}")
 }

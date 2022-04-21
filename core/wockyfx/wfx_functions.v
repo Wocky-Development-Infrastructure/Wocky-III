@@ -66,7 +66,7 @@ pub fn wfx_list_text(r string, c string, gg string) {
 	mut t := wockyfx.replace_code(gg)
 	for i, letter in t.split("\n") {
 		print("\033[${start_c};${c}f${letter}")
-		time.sleep(500*time.millisecond)
+		// time.sleep(500*time.millisecond)
 		start_c++
 	}
 }
@@ -76,7 +76,7 @@ pub fn wfx_list_text_sock(r string, c string, gg string, mut s net.TcpConn) {
 	mut t := wockyfx.replace_code(gg)
 	for i, letter in t.split("\n") {
 		s.write_string("\033[${start_c};${c}f${letter}") or { 0 }
-		time.sleep(500*time.millisecond)
+		// time.sleep(500*time.millisecond)
 		start_c++
 	}
 }

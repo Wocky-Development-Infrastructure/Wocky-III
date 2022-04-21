@@ -14,12 +14,12 @@ import wockyfx
 
 pub struct Wocky {
 	pub mut:
-		client_port		int = 54543
+		client_port		int = 36532
 		bot_port		int
 		sqlconn			&mysql.Connection
 		terminal 		&core.Terminal
 		clients			&core.Clients
-		wx				&wockyfx.WockyFX
+		wx				wockyfx.WockyFX
 }
 
 pub fn start_wocky(mut w Wocky) {

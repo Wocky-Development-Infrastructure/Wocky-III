@@ -138,7 +138,7 @@ pub fn parse_fns(line string, filename string, line_count int, socket_t bool, mu
 	mut fn_args := []string
 
 	if line.contains("(") {
-		if line.ends_with(");") {
+		if line.ends_with(");") || line.ends_with("fn() => {") {
 			mut check_fn := line.split("(")[0]
 			if check_fn in wockyfx.wfx_fns {
 				fn_name = check_fn
