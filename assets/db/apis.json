@@ -1,26 +1,10 @@
 {
     "Traced API": {
         "api_toggle": "true",
-        "api_url": "https://server1.wocky.cc/api?key=lampkey7777&host=70.70.70.70&port=80&time=30&method=UDP",
+        "api_url": "https://server1.wocky.cc/api?key=regergreg&host=70.70.70.70&port=80&time=30&method=UDP",
         "api_maxtime": "1200",
         "api_maxconn": "99",
         "api_methods": "HOME-TRC,UDP-TRC,MIXAMP-TRC,TCP-TRC,NFO-TRC,OVH-TRC,SSH-TRC,GAME-TPC,FIVEM-TRC,ARK-TRC,MC-TRC,HTTPS-TRC,TLS-TRC",
         "api_funnels": ""
-    },
-    "Tyrone API": {
-        "api_toggle": "true",
-        "api_url": "https://server2.wocky.cc/api?key=lampkey7777&host=70.70.70.70&port=80&time=30&method=UDP",
-        "api_maxtime": "1200",
-        "api_maxconn": "99",
-        "api_methods": "DNS,UDP,TCP,SYN,ACK,KILLALL,OVH,HTTPS,STOP",
-        "api_funnels": ""
-    },
-    "Eclipse API": {
-	"api_toggle": "true",
-	"api_url": "https://server3.wocky.cc/api?key=lampkey7777&host=70.70.70.70&port=80&time=30&method=UDP",
-	"api_maxtime": "600",
-	"api_maxconn": "3",
-	"api_methods": "ECLIPSE-LDAP,ECLIPSE-NFO,ECLIPSE-NFOTCP,ECLIPSE-TCPBYPASS,ECLIPSE-OVH,ECLIPSE-OVHBETA,ECLIPSE-OVHMIX,ECLIPSE-GAME,ECLIPSE-UDPKILL,HTTP-GET",
-	"api_funnels": ""
     }
 }
