@@ -89,7 +89,7 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 	mut input_cmd := ""
 	w.wx.enable_socket_mode(mut socket)
 	for {
-		wockyfx.wfx_place_text_sock("13", "5", "${username}", mut socket)
+		// wockyfx.wfx_place_text_sock("13", "5", "${username}", mut socket)
 		w.wx.enable_socket_mode(mut socket)
 		// WockyFX Feature. Detecting a hostname file or use default hostname
 		if wockyfx.check_for_wfx_file("hostname") && wockyfx.check_for_wfx_data("hostname") {
