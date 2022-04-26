@@ -1,5 +1,5 @@
 {
-    "Wcoky API-1": {
+    "Wocky API-1": {
         "api_toggle": "true",
         "api_url": "https://server1.wocky.cc/api?key=lampkey7777&host=[HOST]&port=[PORT]&time=[TIME]&method=[METHOD]",
         "api_maxtime": "1200",
@@ -7,7 +7,7 @@
         "api_methods": "UDP,GAME,BYPASS,OVH",
         "api_funnels": ""
     },
-    "Wcoky API-2": {
+    "Wocky API-2": {
         "api_toggle": "true",
         "api_url": "https://server2.wocky.cc/api?key=lampkey7777&host=[HOST]&port=[PORT]&time=[TIME]&method=[METHOD]",
         "api_maxtime": "1200",
