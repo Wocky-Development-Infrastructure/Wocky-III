@@ -38,6 +38,13 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 		w.wx.set_file("${config.wfx_path}username_login.wfx", wockyfx.FileTypes.wfx)
 		w.wx.parse_wfx()
 		username = reader.read_line() or { "" }
+		if username == "" {
+			username = ""
+			password = ""
+			socket.write_string("${config.Clear}${config.Red}[x] Error, Invalid username or password.....! exiting....") or { 0 }
+			time.sleep(2*time.second)
+			socket.close() or { return }
+		}
 		w.wx.enable_socket_mode(mut socket)
 		w.wx.set_file("${config.wfx_path}password_login.wfx", wockyfx.FileTypes.wfx)
 		w.wx.parse_wfx()
@@ -71,7 +78,7 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	}
 
 	w.clients.add_session(username, mut socket, user_ip, user_port)
-	if wockyfx.check_for_wfx_cmd("home") {
+	if wockyfx.check_for_wfx_file("home") {
 		w.wx.enable_socket_mode(mut socket)
 		w.wx.set_file("${config.wfx_path}home.wfx", wockyfx.FileTypes.wfx)
 		w.wx.parse_wfx()
@@ -123,15 +130,16 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 			if buffer.cmd == "attack" {
 				// Do Attack Bullshit
 				if wockyfx.check_for_wfx_cmd("attack") && wockyfx.check_for_wfx_cmd_data("attack") {
-					w.wx.set_file("${config.wfx_path}cmds/attack_cmd.wfx", wockyfx.FileTypes.wfx)
-					mut max_arg, max_arg_err := wockyfx.check_for_max_arg("${config.wfx_path}cmds/attack_cmd.wfx")
-					if buffer.cmd_args.len < max_arg {
+					w.wx.set_file("${config.wfx_cmd_path}attack_cmd.wfx", wockyfx.FileTypes.wfx)
+					mut exit_co, max_arg := w.wx.check_for_max_arg()
+					if buffer.cmd_args.len < max_arg.int() {
 						w.wx.parse_callback("set_arg_err_msg")
 					} else {
+						println("testing this")
 						mut api_names, api_urls/*, api_maxtime, api_conn*/ := crud.read_apis_with_method_alt(buffer.cmd_args[4])
 						exit_c, t := attack_system.send_api_attack(buffer.cmd_args[1], buffer.cmd_args[2], buffer.cmd_args[3], buffer.cmd_args[4], db_user_info, mut w.sqlconn, api_names, api_urls)
 						w.wx.enable_socket_mode(mut socket)
-						w.wx.set_file("${config.wfx_path}cmds/attack_cmd.wfx", wockyfx.FileTypes.wfx)
+						w.wx.set_file("${config.wfx_cmd_path}attack_cmd.wfx", wockyfx.FileTypes.wfx)
 						w.wx.parse_wfx()
 						// socket.write_string(t) or { 0 }
 					}
@@ -143,13 +151,14 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 					if buffer.cmd == cmd {
 						cmd_found = true
 						w.wx.enable_socket_mode(mut socket)
-						w.wx.set_file("${config.wfx_path}cmds/${buffer.cmd}_cmd.wfx", wockyfx.FileTypes.wfx)
+						w.wx.set_file("${config.wfx_cmd_path}${buffer.cmd}_cmd.wfx", wockyfx.FileTypes.wfx)
+						w.wx.parse_wfx()
 					}
 				}
 
 				if cmd_found == false {
 					w.wx.enable_socket_mode(mut socket)
-					w.wx.set_file("${config.wfx_path}cmds/invalid_cmd.wfx", wockyfx.FileTypes.wfx)
+					w.wx.set_file("${config.wfx_cmd_path}invalid_cmd.wfx", wockyfx.FileTypes.wfx)
 					w.wx.parse_wfx()
 				}
 			}

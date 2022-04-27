@@ -1,13 +1,13 @@
-perm premium
+perm free
 
 set_max_arg(5);
-set_arg_err_msg(fn() => {
+set_arg_err_msg(fnc() => {
     perm free
-    clear();
-    output_wrfx("ui");
-    list_text(13,9,"[x] Error....Invalid argument{NEWLINE}Usage: attack <ip> <port> <time> <method>");
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
+    place_text(13,9,"Test");
 });
 
-clear();
-output_wrfx("ui");
-place_text(13,9,"Attack Sent");
+place_text(13,9,"Working");

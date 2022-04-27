@@ -4,10 +4,10 @@ import os
 
 pub const (
     // WFX Filepath
-    wfx_path         = os.getwd() + "/assets/wockyfx/"
-    whfx_path        = os.getwd() + "/assets/wockyfx/whfx/"
-    wrfx_path        = os.getwd() + "/assets/wockyfx/wrfx/"
-    wfx_cmd_path     = os.getwd() + "/assets/wockyfx/cmds/"
+    wfx_path         = "assets/wockyfx/"
+    whfx_path        = "assets/wockyfx/whfx/"
+    wrfx_path        = "assets/wockyfx/wrfx/"
+    wfx_cmd_path     = "assets/wockyfx/cmds/"
 	//Colors
     Default          = "\x1b[39m"
     Black            = "\x1b[30m"

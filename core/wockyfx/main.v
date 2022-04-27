@@ -53,7 +53,7 @@ pub struct WFX {
 											 'slow_list_text':		3,
 											 'set_term_size': 		2,
 											 'change_term_title':	1,
-											 'move_cursor':			1,
+											 'move_cursor':			2,
 											 'include_whfx':		1, // inside parse_wfx() ( not handler_fn() )
 											 'output_wrfx':			1,
 											 // Returning Functions
@@ -64,7 +64,6 @@ pub struct WFX {
 											 'send_attack':			3,
 											 // Error Handlers
 											 'set_max_arg':			1,
-											 'set_arg_err_msg':		-1 // Do not detect the amount of argument for this function
 											}
 
 		variables 		map[string][]string = {
@@ -146,6 +145,7 @@ pub fn (mut wx WFX) set_file(filepath string, file_type FileTypes) {
 		println("[x] Error, Unable to locate file or read file!")
 		return
 	}
+
 	if data == "" {
 		println("[x] Error, This WFX files contains no data!")
 		return
@@ -212,7 +212,7 @@ pub fn (mut wx WFX) check_for_max_arg() (int, string) {
 	for i, line in wx.file_lines {
 		if line != "" {
 			if line.starts_with("set_max_arg") {
-				if line.contains("(") && line.ends_with("\");") {
+				if line.contains("(") && line.contains(")") {
 					return 1, wockyfx.get_str_between(line, "(", ")")
 				}
 			}
@@ -222,7 +222,8 @@ pub fn (mut wx WFX) check_for_max_arg() (int, string) {
 	return 0, ""
 }
 
-pub fn (mut wx WFX) parse_callback(function string) {
+pub fn (mut wx WFX) parse_callback(function string) int {
+	if wx.file_data.contains(function) {} else { return 0 }
 	exit_code, new_code := wockyfx.get_callback_code(function, wx.file_lines)
 	mut new_filecode := ""
 	for i, line_code in new_code {
@@ -232,26 +233,27 @@ pub fn (mut wx WFX) parse_callback(function string) {
 	new_filename := utilities.create_random_str(10)
 	
 	filepath := "${config.wfx_path}${new_filename}.wfx"
-	os.write_file(filepath, new_filecode) or { panic("Failed") }
+	os.write_file(filepath, new_filecode) or { return 0 }
 
+	old_code := wx.file_lines
+	old_file := wx.file
 	wx.set_file(filepath, FileTypes.wfx)
 	wx.parse_wfx()
+	wx.file = ""
+	wx.file_lines = ['']
 	os.execute("sudo rm -rf ${filepath}").output
+	return 1
 }
 
 pub fn (mut wx WFX) parse_wfx() {
 	// Check for perm keyword and remove
 	if wx.file_type == FileTypes.wfx {
 		wx.parse_perm(wx.file_lines[0])
-	}
-
-	// Check for cmd max_arguments 
-	wx.parse_callback("set_max_arg")
+	}	
 
 	for i, line in wx.file_lines {
 		if line != "" && line.starts_with("//") == false {
 			if line.starts_with("var") {
-				println("here")
 				mut var_name := ""
 				mut var_type := ""
 				mut var_value := ""
@@ -283,10 +285,9 @@ pub fn (mut wx WFX) parse_wfx() {
 						if wockyfx.char_count(line, "\"") == 2 {
 							var_value = wockyfx.get_str_between(line, "\"", "\"")
 						} else if line.contains("get_args()[") {
-							println("here")
+							println("here get_args()")
 							arg_info := line.split("()")[1]
 							arg := wockyfx.get_str_between(arg_info, "[", "]")
-							println("${line} | ${arg}")
 							var_value = wx.check_n_return_arg(arg)
 						} 
 					}
@@ -297,7 +298,7 @@ pub fn (mut wx WFX) parse_wfx() {
 				wx.add_variable(var_name, var_type, var_value)
 			} else if line.starts_with("include_whfx") {
 				wx.parse_whfx(i)
-			} else {
+			} else if line.contains("(fnc() => {") != true {
 				mut fn_found := false
 				for fn_n, fn_max_arg in wx.functions {
 					if line.starts_with(fn_n) {
@@ -329,21 +330,21 @@ pub fn (mut wx WFX) handle_fn(fn_name string, fn_args []string) {
 		}
 		"output_wrfx" {
 			if wx.socket_toggle == true {
-				// wx.wfx_u.wfx
+				wx.wfx_u.wfx_output_wrfx_socket(config.wfx_path + wx.replace_var_code(fn_args[0].replace("\"", "")), mut wx.socket)
 			} else {
-				wx.wfx_u.wfx_output_wrfx(wx.replace_var_code(fn_args[0].replace("\"", "")))
+				wx.wfx_u.wfx_output_wrfx(config.wfx_path + wx.replace_var_code(fn_args[0].replace("\"", "")))
 			}
 		}
 		"hide_cursor" {
 			if wx.socket_toggle == true {
-
+				wx.wfx_u.wfx_hide_cursor_socket(mut wx.socket)
 			} else {
 				wx.wfx_u.wfx_hide_cursor()
 			}
 		} 
 		"show_cursor" {
 			if wx.socket_toggle == true {
-
+				wx.wfx_u.wfx_show_cursor_socket(mut wx.socket)
 			} else {
 				wx.wfx_u.wfx_show_cursor()
 			}
@@ -364,42 +365,42 @@ pub fn (mut wx WFX) handle_fn(fn_name string, fn_args []string) {
 		}
 		"slow_place_text" {
 			if wx.socket_toggle == true {
-				
+				wx.wfx_u.wfx_slow_place_text_socket(fn_args[0], fn_args[1], fn_args[2], fn_args[3], wx.replace_var_code(fn_args[4].replace("\"", "")), mut wx. socket)
 			} else {
 				wx.wfx_u.wfx_slow_place_text(fn_args[0], fn_args[1], fn_args[2], fn_args[3], wx.replace_var_code(fn_args[4].replace("\"", "")))
 			}
 		}
 		"list_text" {
 			if wx.socket_toggle == true {
-
+				wx.wfx_u.wfx_list_text_socket(fn_args[0], fn_args[1], wx.replace_var_code(fn_args[2].replace("\"", "")), mut wx.socket)
 			} else {
 				wx.wfx_u.wfx_list_text(fn_args[0], fn_args[1], wx.replace_var_code(fn_args[2].replace("\"", "")))
 			}
 		}
 		"slow_list_text" {
 			if wx.socket_toggle == true {
-
+				wx.wfx_u.wfx_slow_list_text_socket(fn_args[0], fn_args[1], fn_args[2], fn_args[3], wx.replace_var_code(fn_args[4].replace("\"", "")), mut wx.socket)
 			} else {
 				wx.wfx_u.wfx_slow_list_text(fn_args[0], fn_args[1], fn_args[2], fn_args[3], wx.replace_var_code(fn_args[4].replace("\"", "")))
 			}
 		}
 		"set_term_size" {
 			if wx.socket_toggle == true {
-
+				wx.wfx_u.wfx_set_term_size_socket(fn_args[0], fn_args[1], mut wx.socket)
 			} else {
 				wx.wfx_u.wfx_set_term_size(fn_args[0], fn_args[1])
 			}
 		}
 		"change_term_title" {
 			if wx.socket_toggle == true {
-
+				wx.wfx_u.wfx_change_term_title_socket(fn_args[0].replace("\"", ""), mut wx.socket)
 			} else {
 				wx.wfx_u.wfx_change_term_title(fn_args[0].replace("\"", ""))
 			}
 		} 
 		"move_cursor" {
 			if wx.socket_toggle == true {
-
+				wx.wfx_u.wfx_move_cursor_socket(fn_args[0], fn_args[1], mut wx.socket)
 			} else {
 				wx.wfx_u.wfx_move_cursor(fn_args[0], fn_args[1])
 			}
@@ -471,16 +472,21 @@ pub fn (mut wx WFX) get_fnc_arg(line string, fn_n string) int {
 	if line.ends_with("();") { return 1 }
 	args := get_str_between(line, "(", ")").split(",")
 	mut args_count := args.len
-	
+
+	// Debugging shit
+	// println("======================Arg Info=====================")
+	// println(fn_n)
+	// println("${args_count} | ${args}\r\n${wx.functions[fn_n]}")
+
 	if args_count == 1 && args[0] == "" { 
 		return 1
 	}
 	
 	if args_count < wx.functions[fn_n] {
-		println("[x] Error, Missing function arguments | Line ${wx.file_current_ln}")
+		println("[x] Error, Missing function arguments | File: ${wx.file}, Line ${wx.file_current_ln}")
 		exit(0)
 	} else if args_count > wx.functions[fn_n] {
-		println(": [x] Error, Supplied to much function arguments | Line ${wx.file_current_ln}")
+		println("[x] Error, Supplied to much function arguments | File: ${wx.file}, Line ${wx.file_current_ln}")
 		exit(0)
 	}
 
@@ -528,18 +534,6 @@ pub fn (mut wx WFX) parse_fn(line string) (int, int, []string) {
 		} else { return 0, args_count, args }
 	}
 	return 1, args_count, args
-}
-
-pub fn (mut wx WFX) parse_callback_fn(file string, function string) (int, []string) {
-	return 0, [""]
-}
-
-pub fn (mut wx WFX) execute_fn() {
-
-}
-
-pub fn (mut wx WFX) execute_callback_fn() {
-
 }
 
 pub fn (mut wx WFX) replace_var_code(line string) string {
