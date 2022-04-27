@@ -25,7 +25,7 @@ fn main() {
 	mut w := wocky.Wocky{sqlconn: &mysql.Connection{
 		username: "root",
 		dbname: "wocky3"
-	}, terminal: &t, clients: &core.Clients{}, wx: &wockyfx.WockyFX{}}
+	}, terminal: &t, clients: &core.Clients{}, wx: wockyfx.start_session()}
 	mut args := os.args.clone()
 	for i, arg in args {
 		match arg {

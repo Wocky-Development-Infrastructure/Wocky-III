@@ -19,7 +19,7 @@ pub struct Wocky {
 		sqlconn			&mysql.Connection
 		terminal 		&core.Terminal
 		clients			&core.Clients
-		wx				wockyfx.WockyFX
+		wx				wockyfx.WFX
 }
 
 pub fn start_wocky(mut w Wocky) {

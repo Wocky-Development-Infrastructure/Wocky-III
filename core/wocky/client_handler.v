@@ -26,7 +26,8 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	user_port := "${user_addr}".split("]:")[1]
 	if wockyfx.check_for_wfx_file("upon_connect") && wockyfx.check_for_wfx_data("upon_connect") {
 		w.wx.enable_socket_mode(mut socket)
-		wockyfx.wockyfx(mut w.wx, "upon_connect")
+		w.wx.set_file("${config.wfx_path}upon_connect.wfx", wockyfx.FileTypes.wfx)
+		w.wx.parse_wfx()
 	}
 
 	mut username := ""
@@ -34,10 +35,12 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 
 	if wockyfx.check_for_wfx_file("username_login") && wockyfx.check_for_wfx_file("password_login") {
 		w.wx.enable_socket_mode(mut socket)
-		wockyfx.wockyfx(mut w.wx, "username_login")
+		w.wx.set_file("${config.wfx_path}username_login.wfx", wockyfx.FileTypes.wfx)
+		w.wx.parse_wfx()
 		username = reader.read_line() or { "" }
 		w.wx.enable_socket_mode(mut socket)
-		wockyfx.wockyfx(mut w.wx, "password_login")
+		w.wx.set_file("${config.wfx_path}password_login.wfx", wockyfx.FileTypes.wfx)
+		w.wx.parse_wfx()
 		password = reader.read_line() or { "" }
 	} else {
 		socket.write_string("${config.Red}Username: ${config.Default}") or { 0 }
@@ -70,7 +73,8 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	w.clients.add_session(username, mut socket, user_ip, user_port)
 	if wockyfx.check_for_wfx_cmd("home") {
 		w.wx.enable_socket_mode(mut socket)
-		wockyfx.wockyfx(mut w.wx, "home")
+		w.wx.set_file("${config.wfx_path}home.wfx", wockyfx.FileTypes.wfx)
+		w.wx.parse_wfx()
 	} else {
 		socket.write_string("Welcome to Wocky III\r\n") or { 0 }
 	}
@@ -94,7 +98,8 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 		// WockyFX Feature. Detecting a hostname file or use default hostname
 		if wockyfx.check_for_wfx_file("hostname") && wockyfx.check_for_wfx_data("hostname") {
 		w.wx.enable_socket_mode(mut socket)
-			wockyfx.wockyfx(mut w.wx, "hostname")
+		w.wx.set_file("${config.wfx_path}hostname.wfx", wockyfx.FileTypes.wfx)
+			w.wx.parse_wfx()
 		} else {
 			socket.write_string("[Wocky@NET]~ $ ") or { 
 				w.clients.remove_session(mut socket)
@@ -113,20 +118,21 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 		// Command Handling
 		if input_cmd.replace("\r\n", "").len > 2 {
 			buffer.parse(input_cmd)
-			w.wx.add_buffer_info(buffer.full_cmd, buffer.cmd, buffer.cmd_args)
+			w.wx.set_buffer(buffer.full_cmd, buffer.cmd, buffer.cmd_args)
 
 			if buffer.cmd == "attack" {
 				// Do Attack Bullshit
 				if wockyfx.check_for_wfx_cmd("attack") && wockyfx.check_for_wfx_cmd_data("attack") {
-					w.wx.set_file("attack")
-					mut max_arg, max_arg_err := wockyfx.check_for_max_arg(mut w.wx)
+					w.wx.set_file("${config.wfx_path}cmds/attack_cmd.wfx", wockyfx.FileTypes.wfx)
+					mut max_arg, max_arg_err := wockyfx.check_for_max_arg("${config.wfx_path}cmds/attack_cmd.wfx")
 					if buffer.cmd_args.len < max_arg {
-						wockyfx.wfx_parse_callback(mut w.wx, "attack", "set_arg_err_msg")
+						w.wx.parse_callback("set_arg_err_msg")
 					} else {
 						mut api_names, api_urls/*, api_maxtime, api_conn*/ := crud.read_apis_with_method_alt(buffer.cmd_args[4])
 						exit_c, t := attack_system.send_api_attack(buffer.cmd_args[1], buffer.cmd_args[2], buffer.cmd_args[3], buffer.cmd_args[4], db_user_info, mut w.sqlconn, api_names, api_urls)
 						w.wx.enable_socket_mode(mut socket)
-						wockyfx.wockyfx(mut w.wx, "attack")
+						w.wx.set_file("${config.wfx_path}cmds/attack_cmd.wfx", wockyfx.FileTypes.wfx)
+						w.wx.parse_wfx()
 						// socket.write_string(t) or { 0 }
 					}
 				}
@@ -137,13 +143,14 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 					if buffer.cmd == cmd {
 						cmd_found = true
 						w.wx.enable_socket_mode(mut socket)
-						wockyfx.wockyfx(mut w.wx, buffer.cmd)
+						w.wx.set_file("${config.wfx_path}cmds/${buffer.cmd}_cmd.wfx", wockyfx.FileTypes.wfx)
 					}
 				}
 
 				if cmd_found == false {
 					w.wx.enable_socket_mode(mut socket)
-					wockyfx.wockyfx(mut w.wx, "invalid")
+					w.wx.set_file("${config.wfx_path}cmds/invalid_cmd.wfx", wockyfx.FileTypes.wfx)
+					w.wx.parse_wfx()
 				}
 			}
 		}
