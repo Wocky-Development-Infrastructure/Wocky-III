@@ -93,6 +93,10 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 
 pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info map[string]string) {
 	mut username, ip, port := w.clients.get_session_info(mut socket)
+	if username == "" {
+		w.clients.remove_session(mut socket)
+		socket.close() or { return }
+	}
 	mut buffer := core.Buffer{}
 	mut reader := io.new_buffered_reader(reader: socket)
 	// Grab all commands
