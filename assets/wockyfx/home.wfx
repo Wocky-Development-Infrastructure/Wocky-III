@@ -9,4 +9,4 @@ clear();
 print_text("{Default}");
 output_wrfx("wrfx/ui.wrfx");
 include_whfx("assets/wockyfx/whfx/account.whfx").acc_box();
-include_whfx("assets/wockyfx/whfx/account.whfx").acc_info();
+include_whfx("assets/wockyfx/whfx/account.whfx").set_info();

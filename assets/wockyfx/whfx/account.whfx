@@ -1,7 +1,16 @@
 fnc acc_box() {
-    list_text(14,6,"╔═══════════════════════════╗{NEWLINE}║    Account Information    ║{NEWLINE}╠═══════════════════════════╣{NEWLINE}║ Username: N/A             ║{NEWLINE}║ Plan: N/A                 ║{NEWLINE}║ Maxtime: N/A              ║{NEWLINE}║ Conn: N/A                 ║{NEWLINE}║ Admin: N/A                ║{NEWLINE}║ Expiry: N/A               ║{NEWLINE}╚═══════════════════════════╝");
+    list_text(14,6,"╔═══════════════════════════╗{NEWLINE}║    Account Information    ║{NEWLINE}╠═══════════════════════════╣{NEWLINE}║ Username:                 ║{NEWLINE}║ Plan:                     ║{NEWLINE}║ Maxtime:                  ║{NEWLINE}║ Conn:                     ║{NEWLINE}║ Admin:                    ║{NEWLINE}║ Expiry:                   ║{NEWLINE}╚═══════════════════════════╝");
 }
 
-fnc welcome_msg() {
-    place_text(12,7,"Welcome: {USERNAME}");
+fnc set_info() {
+    place_text(17,18,"{USERNAME}");
+    place_text(18,14,"{PLAN}");
+    place_text(19,17,"{MAXTIME}");
+    place_text(20,14,"{CONN}");
+    place_text(21,15,"{ADMIN}");
+    place_text(22,16,"{EXPIRY}");
+}
+
+fnc welcome() {
+    place_text(12,7,"{Red}Welcome: {USERNAME}{Default}");
 }
