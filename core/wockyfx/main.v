@@ -165,6 +165,10 @@ pub fn (mut wx WFX) set_buffer(fcmd string, cmd string, args []string) {
 	wx.cmd_args = args
 }
 
+pub fn (mut wx WFX) set_info(user_info map[string]string) {
+	wx.user_info = user_info.clone()
+}
+
 pub fn (mut wx WFX) enable_socket_mode(mut socket net.TcpConn) {
 	wx.socket_toggle = true
 	wx.socket = socket
@@ -267,7 +271,6 @@ pub fn (mut wx WFX) parse_wfx() {
 				if line.replace("var", "").starts_with("[") {
 					if split_line[0].ends_with("]") {
 						var_type = split_line[0].replace("var[", "").replace("]", "")
-						println(var_type)
 						if var_type != "str" && var_type != "int" {
 							println("[x] Error, Invalid datatype. str, int or fn....")
 						}
@@ -285,7 +288,6 @@ pub fn (mut wx WFX) parse_wfx() {
 						if wockyfx.char_count(line, "\"") == 2 {
 							var_value = wockyfx.get_str_between(line, "\"", "\"")
 						} else if line.contains("get_args()[") {
-							println("here get_args()")
 							arg_info := line.split("()")[1]
 							arg := wockyfx.get_str_between(arg_info, "[", "]")
 							var_value = wx.check_n_return_arg(arg)
@@ -545,15 +547,15 @@ pub fn (mut wx WFX) replace_var_code(line string) string {
 	}
 	t = t.replace("{ONLINEUSERS}", wx.online_users)
 	if wx.user_info.len != 0 {
-		t = t.replace("{USERID}", wx.user_info['USERID'])
+		t = t.replace("{USERID}", 	wx.user_info['id'])
 		t = t.replace("{USERNAME}", wx.user_info['username'])
-		t = t.replace("{USERIP}", wx.user_info['ip'])
-		t = t.replace("{PLAN}", wx.user_info['plan'])
-		t = t.replace("{MAXTIME}", wx.user_info['maxtime'])
-		t = t.replace("{CONN}", wx.user_info['conn'])
-		t = t.replace("{ONGOING}", wx.user_info['ongoing'])
-		t = t.replace("{ADMIN}", wx.user_info['admin'])
-		t = t.replace("{EXPIRY}", wx.user_info['expiry'])
+		t = t.replace("{USERIP}", 	wx.user_info['ip'])
+		t = t.replace("{PLAN}", 	wx.user_info['plan'])
+		t = t.replace("{MAXTIME}", 	wx.user_info['maxtime'])
+		t = t.replace("{CONN}", 	wx.user_info['conn'])
+		t = t.replace("{ONGOING}", 	wx.user_info['ongoing'])
+		t = t.replace("{ADMIN}", 	wx.user_info['admin'])
+		t = t.replace("{EXPIRY}", 	wx.user_info['expiry'])
 	}
 	return t
 }

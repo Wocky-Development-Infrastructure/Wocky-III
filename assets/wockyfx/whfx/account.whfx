@@ -1,0 +1,7 @@
+fnc acc_box() {
+    list_text(14,6,"╔═══════════════════════════╗{NEWLINE}║    Account Information    ║{NEWLINE}╠═══════════════════════════╣{NEWLINE}║ Username: N/A             ║{NEWLINE}║ Plan: N/A                 ║{NEWLINE}║ Maxtime: N/A              ║{NEWLINE}║ Conn: N/A                 ║{NEWLINE}║ Admin: N/A                ║{NEWLINE}║ Expiry: N/A               ║{NEWLINE}╚═══════════════════════════╝");
+}
+
+fnc welcome_msg() {
+    place_text(12,7,"Welcome: {USERNAME}");
+}

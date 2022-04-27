@@ -72,6 +72,8 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 		time.sleep(3*time.second)
 		socket.close() or { return }
 	}
+	
+	w.wx.set_info(user_info)
 
 	if username == "" && password == "" {
 		socket.close() or { return }
@@ -104,6 +106,7 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 	mut input_cmd := ""
 	w.wx.enable_socket_mode(mut socket)
 	for {
+		w.wx.set_info(db_user_info)
 		// wockyfx.wfx_place_text_sock("13", "5", "${username}", mut socket)
 		w.wx.enable_socket_mode(mut socket)
 		// WockyFX Feature. Detecting a hostname file or use default hostname
@@ -120,6 +123,13 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 		}
 		// Grabbing input or disconnecting user!
 		input_cmd = reader.read_line() or { 
+			w.clients.remove_session(mut socket)
+			socket.close() or { return }
+			return
+		}
+		w.wx.set_info(db_user_info)
+
+		if input_cmd.len > 100 {
 			w.clients.remove_session(mut socket)
 			socket.close() or { return }
 			return
