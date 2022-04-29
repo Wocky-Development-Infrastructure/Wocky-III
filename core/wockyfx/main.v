@@ -258,7 +258,7 @@ pub fn (mut wx WFX) parse_wfx() {
 	for i, line in wx.file_lines {
 		if line != "" && line.starts_with("//") == false {
 			if line.starts_with("var") {
-				print("test")
+				// print("test")
 				mut var_name := ""
 				mut var_type := ""
 				mut var_value := ""
@@ -300,10 +300,10 @@ pub fn (mut wx WFX) parse_wfx() {
 				}
 				wx.add_variable(var_name, var_type, var_value)
 			} else if line.starts_with("include_whfx") {
-				print("test include_whfx")
+				// print("test include_whfx")
 				wx.parse_whfx(i)
 			} else if line.contains("(fnc() => {") != true {
-				print("test (fnc() => {")
+				// print("test (fnc() => {")
 				mut fn_found := false
 				for fn_n, fn_max_arg in wx.functions {
 					if line.starts_with(fn_n) {
@@ -435,8 +435,8 @@ pub fn (mut wx WFX) parse_whfx(line_number int) {
 	// get external function name
 	whfx_filepath := get_str_between(line, "\"", "\"")
 	ext_fn_name := get_str_between(line, ")", "(").replace(".", "")
-	println(line)
-	println("${whfx_filepath} | ${ext_fn_name}")
+	// println(line)
+	// println("${whfx_filepath} | ${ext_fn_name}")
 
 	mut whfx_filedata := os.read_lines(whfx_filepath) or { 
 		println("[x] Error, Unable to read whfx file!")
@@ -445,11 +445,11 @@ pub fn (mut wx WFX) parse_whfx(line_number int) {
 
 	mut new_wfx_code := []string
 	for i, whfx_line in whfx_filedata {
-		if whfx_line.starts_with(ext_fn_name) {
+		if whfx_line.starts_with("fnc ${ext_fn_name}() {") {
 			for ln_n in i+1..whfx_filedata.len {
 				c_ln := whfx_filedata[ln_n]
 				if c_ln.trim_space() == "}" || c_ln.len == 0 {
-					println(new_wfx_code)
+					// println(new_wfx_code)
 					old_file := wx.file
 					old_code := wx.file_lines
 					wx.set_new_wfx_code(new_wfx_code)
