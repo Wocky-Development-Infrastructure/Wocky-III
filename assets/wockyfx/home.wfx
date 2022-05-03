@@ -1,12 +1,13 @@
 perm free
 
 clear();
-change_term_title("Skrillec NET");
+change_term_title("Skrillec Net | {USERNAME}");
 set_term_size(30,87);
 print_text("{Red}");
 place_text(19,33,"Loading Wocky......");
 clear();
 print_text("{Default}");
 output_wrfx("wrfx/ui.wrfx");
-//include_whfx("assets/wockyfx/whfx/account.whfx").acc_box();
+include_whfx("assets/wockyfx/whfx/account.whfx").welcome();
+include_whfx("assets/wockyfx/whfx/account.whfx").acc_box();
 include_whfx("assets/wockyfx/whfx/account.whfx").set_info();

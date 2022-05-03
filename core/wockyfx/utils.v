@@ -10,12 +10,33 @@ pub fn check_for_wfx_file(filename string) bool {
 	return false
 }
 
+pub fn check_for_wfx_data(filename string) bool {
+	mut file := os.read_file("${config.wfx_path}${filename}.wfx") or { "" }
+	if file == "" || file.len == 0 {
+		return false
+	}
+	return true
+}
+
 pub fn check_for_wfx_cmd(filename string) bool {
-	if os.exists("${config.wfx_path}${filename}_cmd.wfx") {
+	if os.exists("${config.wfx_path}cmds/${filename}_cmd.wfx") {
+		println("failed to read file")
 		return true
 	}
 	return false
 }
+
+pub fn check_for_wfx_cmd_data(filename string) bool {
+	mut file := os.read_file("${config.wfx_path}cmds/${filename}_cmd.wfx") or { 
+		println("failed to read file")
+		exit(0)
+	}
+	if file == "" || file.len == 0 {
+		return false
+	}
+	return true
+}
+
 
 pub fn get_all_cmds() []string {
 	all_files := os.ls("${config.wfx_cmd_path}") or { [''] }
@@ -26,22 +47,6 @@ pub fn get_all_cmds() []string {
 		}
 	}
 	return all_commands
-}
-
-pub fn check_for_wfx_cmd_data(filename string) bool {
-	mut file := os.read_file("${config.wfx_cmd_path}${filename}_cmd.wfx") or { "" }
-	if file == "" || file.len == 0 {
-		return false
-	}
-	return true
-}
-
-pub fn check_for_wfx_data(filename string) bool {
-	mut file := os.read_file("${config.wfx_path}${filename}.wfx") or { "" }
-	if file == "" || file.len == 0 {
-		return false
-	}
-	return true
 }
 
 pub fn get_callback_code(function string, file_data []string) (int, []string) {
@@ -64,7 +69,7 @@ pub fn get_callback_code(function string, file_data []string) (int, []string) {
 	return 0, ['']
 }
 
-pub fn check_for_max_arg(filepath string) (int, string) {
+pub fn check_for_max_argg(filepath string) (int, string) {
 	file_data := os.read_lines(filepath) or { [''] }
 	mut new_code := []string
 

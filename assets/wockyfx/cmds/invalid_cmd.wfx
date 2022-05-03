@@ -1,5 +1,4 @@
 perm free
 
-clear();
-output_wrfx("ui");
+include_whfx("assets/wockyfx/whfx/clear_box.whfx").clear();
 place_text(13,5,"[x] Error:  Invalid command!");

@@ -30,9 +30,13 @@ pub fn send_api_attack(ip string, port string, time string, method string, user_
 	// return attack_msg
 
 	mut attack_msg := ""
+	println(user_info)
 	if user_info['plan'].int() > 0 {
+		println("here 1")
 		if user_info['ongoing'] < user_info['conn'] {
+			println("here 2")
 			if time.int() < user_info['maxtime'].int() {
+				println("here 3")
 				for i, api in api_urls {
 					println(api)
 					mut fixed := api.replace("[HOST]", ip)
@@ -44,12 +48,15 @@ pub fn send_api_attack(ip string, port string, time string, method string, user_
 					println(lul)
 				}
 			} else {
+				println("Max Time")
 				return -1, "[x] Error, You tried to attack an IP over the your maxtime plan. Try again with a lower time count\r\n"
 			}
 		} else {
+			println("Max Conn")
 			return -1, "[x] Error, You have reached you're maximum concurrents. Please wait to send attack again....\r\n"
 		}
 	} else {
+		println("Not premium")
 		return -1, "[x] Error, You are not premium to send attack!"
 	}
 	if attack_msg.len > 0 {

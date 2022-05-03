@@ -137,16 +137,24 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 		w.wx.enable_socket_mode(mut socket)
 		
 		// Command Handling
+
+		println("${input_cmd} | ${input_cmd.len}")
 		if input_cmd.replace("\r\n", "").len > 2 {
+			println("here")
 			buffer.parse(input_cmd)
 			w.wx.set_buffer(buffer.full_cmd, buffer.cmd, buffer.cmd_args)
 
+			println(buffer)
 			if buffer.cmd == "attack" {
 				// Do Attack Bullshit
+				println("attk")
 				if wockyfx.check_for_wfx_cmd("attack") && wockyfx.check_for_wfx_cmd_data("attack") {
-					w.wx.set_file("${config.wfx_cmd_path}attack_cmd.wfx", wockyfx.FileTypes.wfx)
-					mut exit_co, max_arg := w.wx.check_for_max_arg()
-					if buffer.cmd_args.len < max_arg.int() {
+					println("here 1")
+					w.wx.set_file("${config.wfx_path}cmds/attack_cmd.wfx", wockyfx.FileTypes.wfx)
+					println("here 2")
+					mut max_arg, max_arg_err := wockyfx.check_for_max_argg("${config.wfx_path}cmds/attack_cmd.wfx")
+					println("here 3")
+					if buffer.cmd_args.len < max_arg {
 						w.wx.parse_callback("set_arg_err_msg")
 					} else {
 						println("testing this")
@@ -159,23 +167,25 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 					}
 				}
 			} else {
+				println("here")
 				// Loop throught commands
 				mut cmd_found := false
 				for i, cmd in all_commands {
 					if buffer.cmd == cmd {
 						cmd_found = true
 						w.wx.enable_socket_mode(mut socket)
-						w.wx.set_file("${config.wfx_cmd_path}${buffer.cmd}_cmd.wfx", wockyfx.FileTypes.wfx)
+						w.wx.set_file("${config.wfx_path}cmds/${buffer.cmd}_cmd.wfx", wockyfx.FileTypes.wfx)
 						w.wx.parse_wfx()
 					}
 				}
 
 				if cmd_found == false {
 					w.wx.enable_socket_mode(mut socket)
-					w.wx.set_file("${config.wfx_cmd_path}invalid_cmd.wfx", wockyfx.FileTypes.wfx)
+					w.wx.set_file("${config.wfx_path}cmds/invalid_cmd.wfx", wockyfx.FileTypes.wfx)
 					w.wx.parse_wfx()
 				}
 			}
+			w.wx.reset_buffer()
 		}
 		println(input_cmd)
 	}

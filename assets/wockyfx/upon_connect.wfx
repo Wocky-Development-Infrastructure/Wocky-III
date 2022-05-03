@@ -1,5 +1,5 @@
 perm free
 
-change_term_title("Test");
+change_term_title("Skrillec Net");
 set_term_size(30,87);
 sleep(500,millisecond);

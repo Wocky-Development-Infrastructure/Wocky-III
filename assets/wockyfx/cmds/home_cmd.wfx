@@ -1,4 +1,4 @@
 perm free
 
-clear();
-output_wrfx("ui");
+change_term_title("Skrillec Net | {USERNAME}");
+include_whfx("assets/wockyfx/whfx/clear_box.whfx").clear();

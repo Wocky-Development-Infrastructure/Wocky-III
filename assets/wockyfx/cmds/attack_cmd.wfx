@@ -1,13 +1,19 @@
 perm free
 
-set_max_arg(5);
+var[str] current_cmd = get_args()[0];
+
+set_max_arg(4);
 set_arg_err_msg(fnc() => {
     perm free
-    place_text(13,9,"Test");
-    place_text(13,9,"Test");
-    place_text(13,9,"Test");
-    place_text(13,9,"Test");
-    place_text(13,9,"Test");
+    var[str] current_cmd = get_args()[0];
+    include_whfx("assets/wockyfx/whfx/clear_box.whfx").clear();
+    list_text(13,9,"Error.... Invalid argument dude!{NEWLINE}{current_cmd} <HOST/IP> <PORT> <TIME> <METHOD>");
 });
 
-place_text(13,9,"Working");
+var[str] host = get_args()[1];
+var[str] port = get_args()[2];
+var[str] time = get_args()[3];
+var[str] method = get_args()[4];
+
+include_whfx("assets/wockyfx/whfx/clear_box.whfx").clear();
+list_text(13,9,"[+] Attack successfully sent to {host}:{port}{NEWLINE}for {time} seconds with {method}");

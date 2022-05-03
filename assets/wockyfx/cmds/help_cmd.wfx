@@ -5,10 +5,7 @@ var[str] my_var = " | Lulz";
 
 hide_cursor();
 include_whfx("assets/wockyfx/whfx/clear_box.whfx").clear();
-sleep(500,millisecond);
-slow_place_text(15,6,250,millisecond,"Help menu loading...");
-include_whfx("assets/wockyfx/whfx/clear_box.whfx").clear();
+slow_place_text(15,6,150,millisecond,"Help menu loading...");
 place_text(20,6,"Help menu here {my_var}");
 sleep(500,millisecond);
 show_cursor();
-sleep(10,second);

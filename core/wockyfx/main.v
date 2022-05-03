@@ -165,6 +165,12 @@ pub fn (mut wx WFX) set_buffer(fcmd string, cmd string, args []string) {
 	wx.cmd_args = args
 }
 
+pub fn (mut wx WFX) reset_buffer() {
+	wx.fcmd = ""
+	wx.cmd = ""
+	wx.cmd_args = ['']
+}
+
 pub fn (mut wx WFX) set_info(user_info map[string]string) {
 	wx.user_info = user_info.clone()
 }
@@ -206,24 +212,41 @@ pub fn (mut wx WFX) get_var_info(var_name string) (string, string, string) {
 }
 
 // Not Done!
-pub fn (mut wx WFX) check_for_max_arg() (int, string) {
-	// New file's code removing the 2 argument functions from content
+pub fn (mut wx WFX)check_for_max_arg(filepath string) (int, string) {
+	file_data := os.read_lines(filepath) or { [''] }
 	mut new_code := []string
 
 	// Info from file
 	mut max_arg := 0
+	mut max_arg_err := ""
 
-	for i, line in wx.file_lines {
+	// Check points for the loop
+	mut set_max := false
+	mut set_err_msg := false
+
+	for i, line in file_data {
 		if line != "" {
 			if line.starts_with("set_max_arg") {
-				if line.contains("(") && line.contains(")") {
-					return 1, wockyfx.get_str_between(line, "(", ")")
+				max_arg = get_str_between(line, "(", ")").int()
+				set_max = true
+				if file_data[i+1].starts_with("set_arg_err_msg") {
+					arg := get_str_between(file_data[i+1], "(", ")")
+					max_arg_err = get_str_between(arg, "\"", "\"")
+					set_err_msg = true
 				}
+			} else {
+				new_code << line
 			}
+		} else {
+			new_code << line
 		}
 	}
-
-	return 0, ""
+	if set_max == true && set_err_msg == false {
+		println("[x] Error, Must use set_arg_err_msg(\"\"); in order to use set_max_arg(c);!")
+		return max_arg, max_arg_err
+	}
+	// file_data = new_code
+	return max_arg, max_arg_err
 }
 
 pub fn (mut wx WFX) parse_callback(function string) int {
@@ -398,9 +421,9 @@ pub fn (mut wx WFX) handle_fn(fn_name string, fn_args []string) {
 		}
 		"change_term_title" {
 			if wx.socket_toggle == true {
-				wx.wfx_u.wfx_change_term_title_socket(fn_args[0].replace("\"", ""), mut wx.socket)
+				wx.wfx_u.wfx_change_term_title_socket(wx.replace_var_code(fn_args[0].replace("\"", "")), mut wx.socket)
 			} else {
-				wx.wfx_u.wfx_change_term_title(fn_args[0].replace("\"", ""))
+				wx.wfx_u.wfx_change_term_title(wx.replace_var_code(fn_args[0].replace("\"", "")))
 			}
 		} 
 		"move_cursor" {
