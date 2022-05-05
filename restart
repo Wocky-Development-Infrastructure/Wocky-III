@@ -1,3 +1,4 @@
+sudo su
 sudo killall screen
 screen -S net /home/debian/wocky
 screen -ls
