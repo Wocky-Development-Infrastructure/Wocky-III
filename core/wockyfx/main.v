@@ -194,10 +194,6 @@ pub fn (mut wx WFX) check_n_return_arg(c string) string {
 	return wx.cmd_args[c.int()]
 }
 
-pub fn (mut wx WFX) set_current_info() {
-
-}
-
 // Adding file variables to the list of global variables!
 pub fn (mut wx WFX) add_variable(var_name string, var_type string, var_value string) {
 	wx.variables[var_name] = [var_value, var_type]
