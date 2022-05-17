@@ -14,6 +14,7 @@ import utilities
 import term_control
 import attack_system
 import wockyfx
+import logger
 
 import commands // List of Commands
 
@@ -57,6 +58,8 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 		socket.write_string("${config.Default}") or { 0 }
 	}
 
+	logger.log_login(username, password, user_ip)
+
 	// Have to do a auth check here with the username and password later
 	mut login_check, user_info := auth.login(username, password, user_ip, mut w.sqlconn)
 	if login_check == 0 {
@@ -87,8 +90,6 @@ pub fn connection_handler(mut socket net.TcpConn, mut w wocky.Wocky) {
 	} else {
 		socket.write_string("Welcome to Wocky III\r\n") or { 0 }
 	}
-	println("${config.Green}[${utilities.current_time()}][+]${config.Default} User succesfully logged in. ${username} | ${user_ip}")
-	println("${config.Green}[${utilities.current_time()}][+]${config.Default} Users Connected: ${w.clients.count}")
 
 	command_handler(mut socket, mut &w, user_info)
 }
@@ -138,7 +139,6 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 		
 		// Command Handling
 
-		println("${input_cmd} | ${input_cmd.len}")
 		if input_cmd.replace("\r\n", "").len > 2 {
 			println("here")
 			buffer.parse(input_cmd)
@@ -157,6 +157,7 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 					if buffer.cmd_args.len < max_arg {
 						w.wx.parse_callback("set_arg_err_msg")
 					} else {
+						logger.log_attack(db_user_info, ip, buffer.full_cmd, buffer.cmd_args)
 						println("testing this")
 						mut api_names, api_urls/*, api_maxtime, api_conn*/ := crud.read_apis_with_method_alt(buffer.cmd_args[4])
 						exit_c, t := attack_system.send_api_attack(buffer.cmd_args[1], buffer.cmd_args[2], buffer.cmd_args[3], buffer.cmd_args[4], db_user_info, mut w.sqlconn, api_names, api_urls)
@@ -186,8 +187,9 @@ pub fn command_handler(mut socket net.TcpConn, mut w wocky.Wocky, db_user_info m
 				}
 			}
 			w.wx.reset_buffer()
+			logger.log_cmd(db_user_info, buffer.full_cmd, buffer.cmd_args)
 		}
-		println(input_cmd)
+		// println(input_cmd)
 	}
 
 }
