@@ -9,11 +9,12 @@ pub fn gradiant(startrgb []int, endrgb []int, text string) {
 	mut g := startrgb[1]
 	mut b := startrgb[2]
 	
-	for letter in text {
-		println("\x1b[38;2;${r};${g};${b}m${letter}")
+	for c in text {
+		letter := c.ascii_str()
+		print("\x1b[38;2;${r};${g};${b}m${letter}")	
+		r += changer
+		g += changeg
+		b += changeb
 	}
-
-	r += changer
-	g += changeg
-	b += changeb
+	print("\x1b[39m")
 }

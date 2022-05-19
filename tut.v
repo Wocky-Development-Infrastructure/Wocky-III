@@ -12,7 +12,7 @@ fn main() {
 	// }
 	// wx.parse_wfx(mut wx, args[1])
 
-	term_control.gradiant([24, 0, 142], [52, 5, 241], "test")
+	term_control.gradiant([24, 0, 142], [52, 5, 241], "its now working#############")
 
 	// println(wockyfx.get_callback_code("attack", "set_arg_err_msg"))
 }
