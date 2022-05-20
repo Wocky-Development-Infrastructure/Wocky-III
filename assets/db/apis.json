@@ -14,5 +14,13 @@
         "api_maxconn": "3",
         "api_methods": "HOME,TCP-ACID,OVH-BLITZ,UDP-GAME",
         "api_funnels": ""
+    },
+    "Vortex API": {
+        "api_toggle": "true",
+        "api_url": "https://api.vortex-api.com/api?key=v-w6oJiucw&host=[HOST]&port=[HOST]&time=[TIME]&method=[METHOD]",
+        "api_maxtime": "600",
+        "api_maxconn": "3",
+        "api_methods": "HOME,UDP-MINI,OVH-CPU,CLDAP,HTTP-BROWSER,UDP,UDP-GAME,OVH-UDP,TCP-GOD,DVR,SOCKET,UAM-POST,TCP-SKY,TCP-OPT,UAM,GET,NTP,WSD,ARD,SNMP,UDP-MINI,TCP-SACK,TCP-ACK,TCP-VORTEX,TCP-VALID",
+        "api_funnels": ""
     }
 }
