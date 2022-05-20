@@ -11,7 +11,8 @@ pub fn gradiant(startrgb []int, endrgb []int, text string) {
 	
 	for c in text {
 		letter := c.ascii_str()
-		print("\x1b[38;2;${r};${g};${b}m${letter}")	
+		print("\x1b[38;2;${r};${g};${b}m${letter}")
+		println("${r} | ${g} | ${b}")
 		r += changer
 		g += changeg
 		b += changeb
