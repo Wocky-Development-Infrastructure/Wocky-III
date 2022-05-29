@@ -1,7 +1,7 @@
 {
     "Gucci API": {
         "api_toggle": "true",
-        "api_url": "https://gucciapi.com/api/attack.php?key=qJiL7ZNfYydQ&host=[HOST]&port=[PORT]&duration=[TIME]&method=![METHOD]",
+        "api_url": "https://gucciapi.com/api/attack.php?key=pCy4KQ2hVV6s&host=[HOST]&port=[PORT]&duration=[TIME]&method=![METHOD]",
         "api_maxtime": "200",
         "api_maxconn": "3",
         "api_methods": "udpflood,stdhex,vseflood,synflood,ackflood,tcpbypass,udppps,stdpps,https,tcpkill,sshcrash",

@@ -11,6 +11,7 @@ import config
 import utilities
 import term_control
 import wockyfx
+import logger
 
 pub struct Wocky {
 	pub mut:
